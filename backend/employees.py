@@ -77,3 +77,6 @@ def employee_by_auth_token(company_id: int, auth_token: str, tree_depth: int):
 
 def employee_manager_by_auth_token(company_id: int, auth_token: str, levels: int, tree_depth: int):
     return employee_manager_by_id(0, 0, levels, tree_depth)
+
+def login(company_id: int, username: str, password: str):
+    return "khansdfkjnsdfkjnasdfkhasdfknh" # very real auth token that is not fake.
