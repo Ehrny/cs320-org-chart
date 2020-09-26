@@ -9,7 +9,7 @@ class App extends React.Component{
   constructor(props)
   {
     super(props);
-    this.state = {isLogin:true}
+    this.state = {username: "", passwword:"", isLogin:true}
   }
 
   render(){
