@@ -1,4 +1,5 @@
 import links
+import requests
 
 def employee_by_id(company_id: int , employee_id: int, tree_depth: int):
     # MOCK ENDPOINT, IGNORES EVERYTHING
@@ -79,4 +80,12 @@ def employee_manager_by_auth_token(company_id: int, auth_token: str, levels: int
     return employee_manager_by_id(0, 0, levels, tree_depth)
 
 def login(company_id: int, username: str, password: str):
-    return "khansdfkjnsdfkjnasdfkhasdfknh" # very real auth token that is not fake.
+    pload = {'company_id': company_id, 'username': username, 'password': password}
+    r = requests.post(path, pload) #path is the website url, which at this point I do not have.
+    if(r.status_code == '403'):
+        print("Username/password incorrect, please try again")
+        auth_token, employee_id = -1, -1
+    elif(r.status_code == '200'):
+        auth_token, employee_id = "KSihH4DasdSg4ht6yFJfxzKSyuwADsvJFK8L", 10 #replace fake auth token and eid with real ones
+
+    return auth_token # very real auth token that is not fake.
