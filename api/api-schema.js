@@ -29,6 +29,7 @@ Employee = {
 // ---------
 
 // Get a given employee. Can also be used to get a tree rooted at the employee.
+// HTTP Response: 200 (OK), 404 (Not Found), 403 (If Wrong Company), 400 (Bad Request)
 GET("company/:id:/employee/:id:")
 parameters = {
     "treeDepth": Number(0), // How deep to populate employees arrays
@@ -38,6 +39,7 @@ response = {
 }
 
 // Get the manager (or managers manager and so on) for a given employee. Can also be used to get a tree rooted at that manager.
+// HTTP Response: 200 (OK), 404 (Not Found), 403 (If Wrong Company), 400 (Bad Request)
 GET("company/:id:/employee/:id:/manager")
 parameters = {
     "levels": Number(1), // How many managers to move the root up. For example if two, the tree is rooted in the manager of the given employee's manager.
@@ -48,6 +50,7 @@ response = {
 }
 
 // Same as GET("/employee/:id:") except uses a search term.
+// HTTP Response: 200 (OK), 404 (Not Found), 403 (If Wrong Company), 400 (Bad Request)
 GET("company/:id:/employee/search")
 parameters = {
     "treeDepth": Number(0), // How deep to populate employees arrays
@@ -58,6 +61,7 @@ response = {
 }
 
 // Get the manager (or managers manager and so on) for a given employee. Can also be used to get a tree rooted at that manager.
+// HTTP Response: 200 (OK), 404 (Not Found), 403 (If Wrong Company), 400 (Bad Request)
 GET("company/:id:/employee/search/manager")
 parameters = {
     "levels": Number(1), // How many managers to move the root up. For example if two, the tree is rooted in the manager of the given employee's manager.
@@ -71,6 +75,7 @@ response = {
 // Update an employee's entry. entries that are not included remain unchanged.
 // Since some changes (at least managerId) require outside approval, changes are 
 // requested, and may not all happen right away.
+// HTTP Response: 200 (OK), 400 (Bad Request)
 PUT("company/:id:/employees/:id:")
 parameters = {
     "firstName": String(null),
@@ -85,6 +90,7 @@ parameters = {
 response = {}
 
 // Delete a given employee
+// HTTP Response: 200 (OK), 400 (Bad Request)
 DELETE("company/:id:/employees/:id:")
 parameters = {}
 response = {} // Not sure what we need here so leaving blank
@@ -111,6 +117,7 @@ GET("company/:id:/employees/1").response = { // Send by a user with permissions
 }
 
 // Get an employee and all employees they directly manage (in this case two people.)
+// HTTP Response: 200 (OK), 400 (Bad Request), 404 (Not Found)
 GET("company/:id:/employees/1?treeDepth=1").response = { // Send by a user with permissions
     "firstName" : "Abdul",
     "lastName" : "Humphrey",
