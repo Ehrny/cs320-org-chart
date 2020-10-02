@@ -18,12 +18,12 @@ def route_employee_manager_by_id(company_id: int, employee_id: int):
     tree_depth = request.args.get("treeDepth", 0)
     return employees.employee_manager_by_id(company_id, employee_id, levels, tree_depth)
 
-@app.route('company/<company_id>/current_employee/<auth_token>')
+@app.route('company/<company_id>/user/<auth_token>')
 def route_employee_by_auth_token(company_id: int, auth_token: str):
     tree_depth = request.args.get("treeDepth", 0)
     return employees.employee_by_auth_token(company_id, auth_token, tree_depth)
 
-@app.route('company/<company_id>/current_employee/<auth_token>/manager')
+@app.route('company/<company_id>/user/<auth_token>/manager')
 def route_employee_manager_by_auth_token(company_id: int, auth_token: str):
     tree_depth = request.args.get("treeDepth", 0)
     levels = request.args.get("levels", 1)
