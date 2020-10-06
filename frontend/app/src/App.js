@@ -4,6 +4,7 @@ import { Switch, Route, BrowserRouter } from 'react-router-dom';
 
 import {Login} from "./components/login"
 import {Dashboard} from "./dashboard"
+import {Dashboardemployee} from "./dashboardemployee"
 
 class App extends React.Component{
   constructor(props)
@@ -21,7 +22,8 @@ class App extends React.Component{
             <BrowserRouter>
             <Switch>
                 <Route path = "/login" component={Login} />
-                <Route path = "/" component={Dashboard} />
+                <Route path = "/Dashboard" component={Dashboard} />
+                <Route path = "/Dashboardemployee" component={Dashboardemployee} />
             </Switch>
             </BrowserRouter>
             </div>

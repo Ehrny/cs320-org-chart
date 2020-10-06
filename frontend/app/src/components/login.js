@@ -29,13 +29,16 @@ export class Login extends Component{
 
         this.setState({ error: false });
 
-        if (!(username === 'admin' && password === 'password')) {
-            return this.setState({ error: true });
-        }
+        
         if ((username === 'admin' && password === 'password')){
             this.setState({islogin:true});
             console.log("You're logged in");
             history.push('/dashboard');  
+        }
+        if ((username === 'employee' && password === 'password')){
+            this.setState({islogin:true});
+            console.log("You're logged in emp");
+            history.push('/dashboardemployee');  
         }
         e.preventDefault();
     }
