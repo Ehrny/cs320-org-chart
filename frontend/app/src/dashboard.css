@@ -1,0 +1,34 @@
+.logo {
+  margin: 16px;
+}
+
+.site-layout .site-layout-background {
+  background: #fff;
+}
+  [data-theme="dark"] .site-layout .site-layout-background {
+    background: #141414;
+  }
+
+  .imageContainer {
+    position: relative;
+    left:15px;
+  }
+
+  .search-bar {
+    width: 500px;
+    margin-top:20px
+  }
+
+  .selectColumn{
+    width: 120px;
+    margin-left : 20px ;
+    margin-top  : 20px
+  }
+
+  .test{
+    border: #141414;
+
+  }
+
+
+  

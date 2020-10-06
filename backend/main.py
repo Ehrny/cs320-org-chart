@@ -7,6 +7,8 @@ app = Flask(__name__)
 def index():
     return 'todo: everything'
 
+app.run(debug=True)
+=======
 @app.route('/company/<company_id>/employee/<employee_id>')
 def route_employee_by_id(company_id: str, employee_id: str):
     tree_depth: str = request.args.get("treeDepth", "0")

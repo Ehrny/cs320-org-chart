@@ -1,0 +1,65 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 20vmin;
+  pointer-events: none;
+}
+
+.loginpage {
+  background-color: #0e131f;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+.App {
+  background-color: #111d2c;
+}
+
+.img {
+  
+  float: left;
+  height:55px;
+  
+}
+.imageContainer {
+  position:relative;
+  left:10px;
+}
+.dash-header {
+  position:relative;
+  height:70px;
+  
+}
+.dash-header{
+  top:10px;
+}
+nav a {
+  float:right;
+  padding: 2px 20px;
+  background-color: #111d2c;
+  font-size: 20px;
+  color: rgb(19, 150, 190);
+}
+
+.inputfields
+{
+  align-items: right;
+  color: rgb(19, 150, 190);
+  font-size: calc(10px + 2vmin);
+}
+
+.button
+{
+  color: rgb(0, 0, 0);
+}
