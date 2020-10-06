@@ -49,6 +49,27 @@ response = {
     "manager": Employee, // Populated with employees to tree depth, making the json response a tree of employees. See Employee above.
 }
 
+// Employee endpoint for the currently logged in user.
+// HTTP Response: 200 (OK), 404 (Not Found), 403 (If Wrong Company), 400 (Bad Request)
+GET("company/:id:/user/:auth_token:")
+parameters = {
+    "treeDepth": Number(0), // How deep to populate employees arrays
+}
+response = {
+    "employee": Employee, // Populated with employees to tree depth, making the json response a tree of employees. See Employee above.
+}
+
+// Manager endpoint for the currently logged in user.
+// HTTP Response: 200 (OK), 404 (Not Found), 403 (If Wrong Company), 400 (Bad Request)
+GET("company/:id:/user/:auth_token:/manager")
+parameters = {
+    "levels": Number(1), // How many managers to move the root up. For example if two, the tree is rooted in the manager of the given employee's manager.
+    "treeDepth": Number(0), // How deep to populate employees arrays
+}
+response = {
+    "manager": Employee, // Populated with employees to tree depth, making the json response a tree of employees. See Employee above.
+}
+
 // Same as GET("/employee/:id:") except uses a search term.
 // HTTP Response: 200 (OK), 404 (Not Found), 403 (If Wrong Company), 400 (Bad Request)
 GET("company/:id:/employee/search")
