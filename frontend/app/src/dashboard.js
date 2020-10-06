@@ -15,6 +15,11 @@ import {
 
   import { Collapse } from 'antd';
 
+  import { Modal, Button } from 'antd';
+
+
+  import { Form,InputNumber} from 'antd';
+
   const { Panel } = Collapse;
   function callback(key) {
     console.log(key);
@@ -30,6 +35,26 @@ import {
   }
 
 
+
+  
+  const onFinish = (values) => {
+    console.log(values);
+  };
+   
+
+
+  const layout = {
+    labelCol: {
+      span: 8,
+    },
+    wrapperCol: {
+      span: 16,
+    },
+  };
+
+
+
+
 export class Dashboard extends React.Component{
  
         state = {
@@ -41,7 +66,26 @@ export class Dashboard extends React.Component{
           this.setState({ collapsed });
         };
 
-   
+
+        state = {
+          addEmp: false,
+          dropEmp: false,
+          editEmp: false,
+        };
+      
+        addEmp(modal1Visible) {
+          this.setState({ modal1Visible });
+        }
+      
+        dropEmp(modal2Visible) {
+          this.setState({ modal2Visible });
+        }
+        editEmp(modal3Visible) {
+          this.setState({ modal3Visible });
+        }
+
+ 
+
 
         render() {
           return (
@@ -50,25 +94,118 @@ export class Dashboard extends React.Component{
               
                 <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
                   
-                  <Menu.Item key="2" icon={<DesktopOutlined />}>
-                    View
-                  </Menu.Item>
-                  <SubMenu key="sub1" icon={<UserOutlined />} title="Manage">
-                    <Menu.Item key="3">add</Menu.Item>
-                    <Menu.Item key="4">drop</Menu.Item>
-                    <Menu.Item key="5">edit</Menu.Item>
-                  </SubMenu>
+        <Menu.Item key="2" icon={<DesktopOutlined />}>View</Menu.Item>
+        <SubMenu key="sub1" icon={<UserOutlined />} title="Manage">
+                    
+        <Menu.Item key="3"onClick={()=>this.addEmp(true)}> add </Menu.Item> 
+                   
+          <Modal
+          title="Add Employee"
+          style={{ top: 20 }}
+          visible={this.state.modal1Visible}
+          onOk={() => this.addEmp(false)}
+          onCancel={() => this.addEmp(false)}
+        >
+         
+
+
+         <Form {...layout} name="nest-messages" onFinish={onFinish} >
+      <Form.Item
+        name={['user', 'name']}
+        label="Name"
+        rules={[
+          {
+            required: true,
+          },
+        ]}
+      >
+        <Input />
+      </Form.Item>
+      <Form.Item
+        name={['user', 'email']}
+        label="Email"
+        rules={[
+          {
+            type: 'email',
+          },
+        ]}
+      >
+        <Input />
+      </Form.Item>
+      <Form.Item
+        name={['user', 'EmployeeID']}
+        label="EmployeeID"
+      >
+        <InputNumber />
+      </Form.Item>
+      <Form.Item name={['user', 'positionTitle']} label="positionTitle">
+        <Input />
+      </Form.Item>
+      <Form.Item name={['user', 'Tag']} label="Tag">
+        <Input.TextArea />
+      </Form.Item>
+      <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
+        <Button type="primary" htmlType="submit">
+          Submit
+        </Button>
+      </Form.Item>
+    </Form>
+
+   
+
+
+
+
+
+
+
+
+
+        </Modal>
+
+
+
+       <Menu.Item key="4" onClick={()=>this.dropEmp(true)}>drop</Menu.Item>
+
+          <Modal
+          title="Drop Employee"
+          style={{ top: 20 }}
+          visible={this.state.modal2Visible}
+          onOk={() => this.dropEmp(false)}
+          onCancel={() => this.dropEmp(false)}
+        >
+          <p>contents...</p>
+      
+        </Modal>
+  
+
+        <Menu.Item key="5"onClick={()=>this.editEmp(true)}>edit</Menu.Item>
+
+          <Modal
+          title="Edit Employee"
+          style={{ top: 20 }}
+          visible={this.state.modal3Visible}
+          onOk={() => this.editEmp(false)}
+          onCancel={() => this.editEmp(false)}
+        >
+          <p>contents...</p>
+
+     
+        </Modal>
+        
+        </SubMenu>
+
                  
-                  <Menu.Item key="6" icon={<FundViewOutlined />}>
-                    Detail
-                  </Menu.Item>
+        <Menu.Item key="6" icon={<FundViewOutlined />}>Detail</Menu.Item>
                   
                     <hr></hr>
-                  <Menu.Item key="1" icon={<LogoutOutlined />} >
-                  <a href="./login" onClick={this.lgin}>logout</a>
-                  </Menu.Item>
-                </Menu>
-              </Sider>
+
+        <Menu.Item key="1" icon={<LogoutOutlined />} >
+           <a href="./login" onClick={this.lgin}>logout</a>
+        </Menu.Item>
+                
+      </Menu>
+    </Sider>
 
            
 
@@ -112,9 +249,9 @@ export class Dashboard extends React.Component{
    <Collapse defaultActiveKey={['1']} onChange={callback}>
     <Panel header="Detail Info" key="1">
       < Descriptions title="Employee Info" >
-    <Descriptions.Item label="First Name" bordered>First</Descriptions.Item>
-    <Descriptions.Item label="Last Name">last</Descriptions.Item>
-    <Descriptions.Item label="Position">manager</Descriptions.Item>
+    <Descriptions.Item label="First Name" bordered>...</Descriptions.Item>
+    <Descriptions.Item label="Last Name">...</Descriptions.Item>
+    <Descriptions.Item label="Position">...</Descriptions.Item>
   </Descriptions>,
     </Panel>
     
