@@ -1,6 +1,8 @@
 import links
 import pymongo
 import json
+import jwt
+import datetime
 
 # We might consider moving this to be per connection, but for now this is fine.
 client = pymongo.MongoClient("mongodb://localhost:27017/")
@@ -54,4 +56,43 @@ def employee_manager_by_auth_token(company_id: int, auth_token: str, levels: int
     return employee_manager_by_id(0, 0, levels, tree_depth) # TODO
 
 def login(company_id: int, username: str, password: str):
-    return "khansdfkjnsdfkjnasdfkhasdfknh" # very real auth token that is not fake.
+    pload = {'company_id': company_id, 'username': username, 'password': password}
+    employee_found : dict = db["Employees"].find_one_or_404(pload)
+    r = requests.post(path, pload) #path is the website url, which at this point I do not have.
+    if(r.status_code == '404'):
+        print("Username/password incorrect, please try again")
+        auth_token, employee_id = -1, -1
+    elif(r.status_code == '200'):
+        auth_token, employee_id = "KSihH4DasdSg4ht6yFJfxzKSyuwADsvJFK8L", 10 #replace fake auth token and eid with real ones
+
+    return auth_token # very real auth token that is not fake.
+
+def encode_auth_token(company_id: int, username: int):
+    """
+    Generates the auth_token
+    """
+    try:
+        payload = {
+            'exp': datetime.datetime.utcnow() + timedelta(days = 0, hours = 1, seconds = 0)
+            'iat': datetime.datetime.utcnow()
+            'cid': company_id
+            'uid': username
+        }
+        return jwt.encode(payload, app.config.get('SECRET_KEY'), algorithm='HS256')
+    except Exception as e:
+        return e
+
+@staticmethod
+def decode_auth_token(auth_token):
+    """
+    Decodes the auth token
+    """
+    try:
+        payload = jwt.decode(auth_token, app.config.get('SECRET_KEY'))
+        return payload['username']
+    except jwt.ExpiredSignatureError:
+        return 'Signature expired. Please log in again.'
+    except jwt.InvalidTokenError:
+        return 'Invalid token. Please log in again.'
+
+
