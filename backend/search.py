@@ -1,20 +1,20 @@
-"""
-Handles searching for employees.
+import pymongo
+import employees
 
-{
-        "_id" : ObjectId("5f76310f7b12743d1c83c6f6"),
-        "firstName" : "Miquel",
-        "lastName" : "Pineda",
-        "companyId" : 1,
-        "password" : "pinedami",
-        "positionTitle" : "CEO",
-        "companyName" : "Cyclone Aviation",
-        "isManager" : true,
-        "employeeId" : 1,
-        "email" : "Miquel_Pineda@cycloneaviation.com",
-        "startDate" : "2016-05-04"
-}
+# We might consider moving this to be per connection, but for now this is fine.
+client = pymongo.MongoClient("mongodb://localhost:27017/")
+db = client["OrgChart"]
 
-"""
+def search(company_id: int, search_term: str):
+    # Search the database, if this crashes make sure you run mongodbStuff/importJSON.py
+    search_docs = db["Employees"].find({ 
+        "companyId": company_id, 
+        "$text": {
+            "$search": search_term,
+        }
+    })
 
-def search()
+    # Convert documents to output format
+    search_objects = [employees.employee_tree(doc, 0) for doc in search_docs]
+
+    return { "results": search_objects }

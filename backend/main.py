@@ -1,5 +1,6 @@
 from flask import Flask, request
 import employees
+import search
 
 app = Flask(__name__)
 
@@ -30,6 +31,11 @@ def route_employee_manager_by_auth_token(company_id: str, auth_token: str):
     tree_depth: str = request.args.get("treeDepth", "0")
     levels: str = request.args.get("levels", "1")
     return employees.employee_manager_by_auth_token(int(company_id), auth_token, int(levels), int(tree_depth))
+
+@app.route('/company/<company_id>/search')
+def route_search(company_id: str):
+    query: str = request.args.get("q", "")
+    return search.search(int(company_id), query)
 
 # @app.route('/company/<company_id>/login', methods=['POST'])
 # def route_login(company_id: str):
