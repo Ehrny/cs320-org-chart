@@ -37,6 +37,11 @@ def route_search(company_id: str):
     query: str = request.args.get("q", "")
     return search.search(int(company_id), query)
 
+@app.route('/company/<company_id>/search/<field>')
+def route_search_param(company_id: str, field: str):
+    query: str = request.args.get("q", "")
+    return search.search(int(company_id), query, field=field)
+
 # @app.route('/company/<company_id>/login', methods=['POST'])
 # def route_login(company_id: str):
 #     username: str = request.args.get("username", "")
