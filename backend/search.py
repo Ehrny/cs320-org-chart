@@ -28,7 +28,9 @@ def search(company_id: int, search_term: str, field: str = None):
         secure_field = secure_fields.get(field)
         if secure_field is None: return "Invalid field. TODO: Better error"
         query = { "companyId": company_id }
-        query[secure_field] = "/{}/".format(search_term)
+        query[secure_field] = {
+            "$regex": search_term
+        }
     
     search_docs = db["Employees"].find(query)
 
