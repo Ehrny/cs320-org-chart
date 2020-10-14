@@ -29,8 +29,8 @@ def route_employee_manager_by_auth_token(company_id: str, auth_token: str):
     levels: str = request.args.get("levels", "1")
     return employees.employee_manager_by_auth_token(int(company_id), auth_token, int(levels), int(tree_depth))
 
-@app.route('/import/company/<company_id>', methods=['POST'])
-def route_import(company_id: str):
+@app.route('/import', methods=['POST'])
+def route_import():
     content = request.json
     if content is None: return "invalid request"
     return importfiles.json(content)
