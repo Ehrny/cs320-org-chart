@@ -5,13 +5,14 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return 'todo: everything'
+    return {'todo': 'everything'}
 
 app.run(debug=True)
-=======
+
 @app.route('/company/<company_id>/employee/<employee_id>')
 def route_employee_by_id(company_id: str, employee_id: str):
     tree_depth: str = request.args.get("treeDepth", "0")
+    print('companyID: ',company_id, type(company_id))
     return employees.employee_by_id(int(company_id), int(employee_id), int(tree_depth))
 
 @app.route('/company/<company_id>/employee/<employee_id>/manager')
@@ -36,3 +37,12 @@ def route_login(company_id: str):
     username: str = request.args.get("username", "")
     password: str = request.args.get("password", "")
     return employees.login(int(company_id), username, password)
+
+@app.route('/naivelogin/<EmployeeID>')
+def route_login2(EmployeeID: str):
+    data = employees.return_rawdata()
+    for i in data:
+        if(i["employeeId"]==int(EmployeeID)):
+            return i
+    return {'Not found: ': EmployeeID}
+    #return employees.return_rawdata()[0]

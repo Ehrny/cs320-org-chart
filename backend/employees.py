@@ -38,6 +38,11 @@ def employee_tree(employee_doc: dict, tree_depth: int):
         }
     }
 
+def return_rawdata():
+    with open('../frontend/app/src/Data/Tiger_Microsystems-employees.json', 'r') as jsonfile:
+        data= json.load(jsonfile)
+    return data
+    
 def employee_by_id(company_id: int , employee_id: int, tree_depth: int):
     employee_doc: dict = db["Employees"].find_one(
        {"employeeId": employee_id}
