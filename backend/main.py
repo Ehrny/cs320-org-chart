@@ -7,8 +7,6 @@ app = Flask(__name__)
 def index():
     return 'todo: everything'
 
-app.run(debug=True)
-
 @app.route('/company/<company_id>/employee/<employee_id>')
 def route_employee_by_id(company_id: str, employee_id: str):
     tree_depth: str = request.args.get("treeDepth", "0")
@@ -36,3 +34,7 @@ def route_employee_manager_by_auth_token(company_id: str, auth_token: str):
 #     username: str = request.args.get("username", "")
 #     password: str = request.args.get("password", "")
 #     return employees.login(int(company_id), username, password)
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
