@@ -1,5 +1,5 @@
 from flask import Flask, request
-import employees
+import employees, importfiles
 
 app = Flask(__name__)
 
@@ -28,6 +28,12 @@ def route_employee_manager_by_auth_token(company_id: str, auth_token: str):
     tree_depth: str = request.args.get("treeDepth", "0")
     levels: str = request.args.get("levels", "1")
     return employees.employee_manager_by_auth_token(int(company_id), auth_token, int(levels), int(tree_depth))
+
+@app.route('/import/company/<company_id>', methods=['POST'])
+def route_import(company_id: str):
+    content = request.json
+    if content is None: return "invalid request"
+    return importfiles.json(content)
 
 # @app.route('/company/<company_id>/login', methods=['POST'])
 # def route_login(company_id: str):
