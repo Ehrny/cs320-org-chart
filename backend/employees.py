@@ -63,7 +63,7 @@ def login(company_id: int, username: str, password: str):
         'username': username,
         'password': password
     }
-    employee_found: dict = db["Employees"].find_one_or_404(pload)
+    employee_found: dict = db["Employees"].find_one(pload)
     if employee_found:
         auth_token =  encode_auth_token(company_id, username)
         return auth_token
