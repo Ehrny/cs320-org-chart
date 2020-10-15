@@ -11,6 +11,8 @@
     - other shells: see https://docs.python.org/3/library/venv.html
 * ensure that you are in the venv (should have venv in front of your shell prompt)
 * run "python -m pip -r requirements.txt
+* Install mongodb and make sure mongod is running.
+* run mongodbStuff/importJSON.py to initialize the database
 * If you are in a unix, run "./run.sh". If you're on windows, run "./run.bat". If that doesn't work either fix it or let slack know, it's untested.
 * The app should launch on **localhost:5000**
 
