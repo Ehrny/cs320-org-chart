@@ -59,7 +59,7 @@ def employee_manager_by_auth_token(company_id: int, auth_token: str, levels: int
 
 def login(company_id: int, username: str, password: str):
     pload = {
-        'company_id': company_id,
+        'companyId': company_id,
         'username': username,
         'password': password
     }
