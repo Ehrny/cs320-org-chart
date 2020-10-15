@@ -5,9 +5,9 @@
 * Make sure python 3.8 is installed, and figure out your python 3.8 command.
 * Navigate to backend/ and run "{pythoncommand} -m venv .venv". If this fails, you may need to install venv.
 * Activate the virtual environment
-    - cmd.exe: C:\> <venv>\Scripts\activate.bat
-    - PowerShell (windows): PS C:\> <venv>\Scripts\Activate.ps1
-    - bash/zsh: $ source <venv>/bin/activate
+    - cmd.exe: C:\> .venv\Scripts\activate.bat
+    - PowerShell (windows): PS C:\> .venv\Scripts\Activate.ps1
+    - bash/zsh: $ source .venv/bin/activate
     - other shells: see https://docs.python.org/3/library/venv.html
 * ensure that you are in the venv (should have venv in front of your shell prompt)
 * run "python -m pip -r requirements.txt
