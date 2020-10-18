@@ -30,4 +30,4 @@ jobs:
 
       - name: NPM Build
         run: |
-          CI=false pm run build
+          CI=false npm run build
