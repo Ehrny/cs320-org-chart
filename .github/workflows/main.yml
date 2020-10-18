@@ -23,8 +23,10 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
           
-      - name: Build NPM
+      - name: NPM Install
         run: |
           cd $GITHUB_WORKSPACE/frontend/app
           npm install
-          npm run build
+
+      - name: NPM Build
+          CI=false pm run build
