@@ -1,10 +1,12 @@
 import pymongo
 import employees
 import typing
+import dns
+import config
 
 # We might consider moving this to be per connection, but for now this is fine.
-client = pymongo.MongoClient("mongodb://localhost:27017/")
-db = client["OrgChart"]
+client = pymongo.MongoClient(config.MONGO_URL)
+db = client[config.MONGO_DB]
 
 def search_all(company_id: int, search_term: str):
     search_docs = db["Employees"].find({ 
