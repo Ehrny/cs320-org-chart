@@ -29,4 +29,5 @@ jobs:
           npm install
 
       - name: NPM Build
+        run: |
           CI=false pm run build
