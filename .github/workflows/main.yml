@@ -30,4 +30,5 @@ jobs:
 
       - name: NPM Build
         run: |
+          cd $GITHUB_WORKSPACE/frontend/app
           CI=false npm run build
