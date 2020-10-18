@@ -3,10 +3,12 @@ import pymongo
 import json
 import jwt
 import datetime
+import dns
+import config
 
 # We might consider moving this to be per connection, but for now this is fine.
-client = pymongo.MongoClient("mongodb://localhost:27017/")
-db = client["OrgChart"]
+client = pymongo.MongoClient(config.MONGO_URL)
+db = client[config.MONGO_DB]
 
 # Return a tree of employees with depth tree depth rooted with employee_doc
 def employee_tree(employee_doc: dict, tree_depth: int):
