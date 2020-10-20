@@ -36,6 +36,7 @@ def employee_tree(employee_doc: dict, tree_depth: int):
         "companyId": employee_doc["companyId"],
         "startDate": employee_doc["startDate"],
         "manager": link_to_manager,
+        "managerId": employee_doc["managerId"],
         "employees": employees,
         "actions": { # TODO
 
@@ -44,7 +45,7 @@ def employee_tree(employee_doc: dict, tree_depth: int):
 
 def employee_by_id(company_id: int , employee_id: int, tree_depth: int):
     employee_doc: dict = db["Employees"].find_one(
-       {"employeeId": employee_id}
+       {"employeeId": employee_id, "companyId": company_id}
     )
     return employee_tree(employee_doc, tree_depth)
 
