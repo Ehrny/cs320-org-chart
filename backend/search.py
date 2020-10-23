@@ -2,12 +2,11 @@ import pymongo
 import employees
 import typing
 import dns
-import config
-import os
+import config; config.load_config(configname=".env")
 
 # We might consider moving this to be per connection, but for now this is fine.
 client = pymongo.MongoClient(config.MONGO_URL)
-db = client[os.getenv("MONGO_DB")]
+db = client[config.MONGO_DB]
 
 def search_all(company_id: int, search_term: str):
     search_docs = db["Employees"].find({ 
