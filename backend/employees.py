@@ -5,10 +5,11 @@ import jwt
 import datetime
 import dns
 import config
+import os
 
 # We might consider moving this to be per connection, but for now this is fine.
 client = pymongo.MongoClient(config.MONGO_URL)
-db = client[config.MONGO_DB]
+db = client[os.getenv("MONGO_DB")]
 
 # Return a tree of employees with depth tree depth rooted with employee_doc
 def employee_tree(employee_doc: dict, tree_depth: int):
@@ -36,7 +37,7 @@ def employee_tree(employee_doc: dict, tree_depth: int):
         "companyId": employee_doc["companyId"],
         "startDate": employee_doc["startDate"],
         "manager": link_to_manager,
-        "managerId": employee_doc["managerId"],
+        "managerId": employee_doc.get("managerId"),
         "employees": employees,
         "actions": { # TODO
 
