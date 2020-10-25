@@ -13,6 +13,6 @@
 * run "python -m pip install -r requirements.txt
 * Install mongodb and make sure mongod is running.
 * run mongodbStuff/importJSON.py to initialize the database
-* If you are in a unix, run "./run.sh". If you're on windows, run "./run.bat". If that doesn't work either fix it or let slack know, it's untested.
+* If you are in a unix, run "./run.sh". If you're on windows, run "run.bat". If that doesn't work either fix it or let slack know, it's untested.
 * The app should launch on **localhost:5000**
 
