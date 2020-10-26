@@ -5,6 +5,7 @@ import { Switch, Route, BrowserRouter } from 'react-router-dom';
 import {Login} from "./components/login"
 import {Dashboard} from "./dashboard"
 import {Dashboardemployee} from "./dashboardemployee"
+import {Dashboardmanager} from "./dashboardmanager"
 
 class App extends React.Component{
   constructor(props)
@@ -20,10 +21,11 @@ class App extends React.Component{
       <div className="login">
           <div className = "app-routes">
             <BrowserRouter>
-            <Switch>
+            <Switch>   
                 <Route path = "/login" component={Login} />
                 <Route path = "/Dashboard" component={Dashboard} />
                 <Route path = "/Dashboardemployee" component={Dashboardemployee} />
+                <Route path = "/Dashboardmanager" component={Dashboardmanager} />
             </Switch>
             </BrowserRouter>
             </div>
