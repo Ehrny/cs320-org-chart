@@ -6,7 +6,7 @@ import 'antd/dist/antd.css';
 import Drop from "./drop";
 import './index.css';
 import './dashboard.css';
-import { Layout, Menu, Breadcrumb, Input, Select, Descriptions, Collapse, Modal, Button, Form, InputNumber ,DatePicker } from 'antd';
+import { Layout, Menu, Breadcrumb, Input, Select, Descriptions, Collapse, Modal, Button, Form, InputNumber ,DatePicker, Result } from 'antd';
 import {
     DesktopOutlined,
     UserOutlined,
@@ -112,10 +112,34 @@ export class Dashboardemployee extends React.Component{
                                 startDate : json.startDate})
                               })
           }
+
           if(this.state.searchparam=='First')
           {
-            console.log('Searching by firstname')
+
+            console.log('searching by: ', this.state.searchparam)
+            let resp = fetch('/company/3/search/firstName?q=' + emplID)
+            //let resp = fetch('/naivelogin/'+emplID)//company/3/employee/1')
+                            .then(response => {
+                              console.log(response);
+                              return response.json()})
+                            .then(json =>
+                              {
+                                console.log(json)
+                                this.setState({
+                                firstName : json.firstName[0],
+                                lastName : json.lastName,
+                                companyId : json.companyId,
+                                password : json.password,
+                                positionTitle : json.positionTitle,
+                                companyName : json.companyName,
+                                isManager : json.isManager,
+                                employeeId : json.employeeId,
+                                email : json.email,
+                                startDate : json.startDate})
+                              })
+
           }
+
           if(this.state.searchparam=='Last')
           {
             console.log("Searching by lastname")
