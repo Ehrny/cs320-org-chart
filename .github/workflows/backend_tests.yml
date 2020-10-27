@@ -46,5 +46,6 @@ jobs:
           
       - name: Run Tests
         run: |
+          cd $GITHUB_WORKSPACE/backend
           cat .testenv
           pytest
