@@ -2,7 +2,6 @@ import pymongo
 import employees
 import typing
 import dns
-import config; config.load_config(".env")
 
 def search_all(db: pymongo.MongoClient, company_id: int, search_term: str):
     search_docs = db["Employees"].find({ 
@@ -31,7 +30,7 @@ def search_field(db: pymongo.MongoClient, company_id: int, search_term: str, fie
     
     query: typing.Dict[str, typing.Any] = { "companyId": company_id }
     query[secure_field] = {
-        "$regex": search_term
+        "$regex": search_term, "$options": "i"
     }
     
     search_docs = db["Employees"].find(query)
