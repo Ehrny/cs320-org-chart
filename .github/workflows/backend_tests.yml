@@ -37,6 +37,7 @@ jobs:
           echo "" > .testenv
           echo "MONGO_DB=TESTORGCHART" >> .testenv
           echo "MONGO_URL=localhost:27017" >> .testenv
+          cat .testenv
 
       - name: Install dependencies
         run: |
@@ -45,4 +46,6 @@ jobs:
           
       - name: Run Tests
         run: |
+          cd $GITHUB_WORKSPACE/backend
+          cat .testenv
           pytest
