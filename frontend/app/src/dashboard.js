@@ -179,11 +179,59 @@ export class Dashboard extends React.Component{
           }
           if(this.state.searchparam=='First')
           {
-            console.log('Searching by firstname')
+
+            console.log('searching by: ', this.state.searchparam)
+            let resp = fetch('/company/1/search/firstName?q=' + emplID)
+            //let resp = fetch('/naivelogin/'+emplID)//company/3/employee/1')
+                            .then(response => {
+                              console.log(response);
+                              return response.json()})
+                            .then(json =>
+                              {
+                                console.log(json)
+                                this.setState({
+                                firstName : json.results[0].firstName,
+                                lastName : json.results[0].lastName,
+                                companyId : json.results[0].companyId,
+                                password : json.results[0].password,
+                                positionTitle : json.results[0].positionTitle,
+                                companyName : json.results[0].companyName,
+                                isManager : json.results[0].isManager,
+                                employeeId : json.results[0].employeeId,
+                                email : json.results[0].email,
+                                startDate : json.results[0].startDate})
+                              })
+
           }
+
           if(this.state.searchparam=='Last')
           {
             console.log("Searching by lastname")
+
+              console.log('searching by: ', this.state.searchparam)
+              let resp = fetch('/company/1/search/lastName?q=' + emplID)
+              //let resp = fetch('/naivelogin/'+emplID)//company/3/employee/1')
+                              .then(response => {
+                                console.log(response);
+                                return response.json()})
+                              .then(json =>
+                                {
+                                  console.log(json)
+                                  this.setState({
+                                  firstName : json.results[0].firstName,
+                                  lastName : json.results[0].lastName,
+                                  companyId : json.results[0].companyId,
+                                  password : json.results[0].password,
+                                  positionTitle : json.results[0].positionTitle,
+                                  companyName : json.results[0].companyName,
+                                  isManager : json.results[0].isManager,
+                                  employeeId : json.results[0].employeeId,
+                                  email : json.results[0].email,
+                                  startDate : json.results[0].startDate})
+                                })
+  
+
+
           }
         }                   
 
