@@ -5,9 +5,11 @@ import os
 MONGO_URL = None
 MONGO_DB = None
 
-def load_config(configname=".env"):
+def load_config(configname):
     global MONGO_URL
     global MONGO_DB # This is nonsense
+
+    print("CONFIGNAME", configname)
     
     env_path = Path('.') / configname
     load_dotenv(env_path)
