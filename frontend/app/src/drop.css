@@ -1,0 +1,126 @@
+.contain {
+    transform: translateY(-100%);
+}
+
+.contain p {
+    color: red;
+    text-align: center;
+}
+
+.dropcont {
+    position: relative;
+    top:200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 500px;
+    height: 200px;
+    border: 4px dashed #4aa1f3;
+}
+
+.upload-icon {
+    width: 50px;
+    height: 100px;
+    position: relative;
+    left:40px;
+    background: url(./imgs/upload.png) no-repeat center center; 
+    background-size: 100%;
+    text-align: center;
+    margin: 0;
+    padding-top: 30px;
+}
+
+.drop-message {
+    text-align: center;
+    position:relative;
+    right:160px;
+    color: #1a7fdd;
+    font-family: Arial;
+    font-size: 20px;
+}
+
+.file-display-container {
+    position: relative;
+    top:150px;
+    width: 800px;
+    height:100px;
+}
+
+.file-status-bar{
+    width: 100%;
+    vertical-align:top;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    position: relative;
+    line-height: 50px;
+    height: 50px;
+}
+
+.file-status-bar > div {
+    overflow: hidden;
+}
+
+.file-type {
+    display: inline-block!important;
+    position: relative;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 13px;
+    margin-top: 25px;
+    padding: 0 4px;
+    border-radius: 2px;
+    box-shadow: 1px 1px 2px #abc;
+    color: #fff;
+    background: #0080c8;
+    text-transform: uppercase;
+}
+
+.file-name {
+    display: inline-block;
+    vertical-align:top;
+    margin-left: 50px;
+    color: #4aa1f3;
+}
+
+.file-error {
+    display: inline-block;
+    vertical-align: top;
+    margin-left: 50px;
+    color: #9aa9bb;
+}
+
+.file-error-message {
+    color: red;
+    position:relative;
+    display:inline-block;
+}
+
+.file-type-logo {
+    width: 50px;
+    height: 50px;
+    background: url(./imgs/generic.png) no-repeat center center; 
+    background-size: 100%;
+    position: absolute;
+}
+
+.file-size {
+    display:inline-block;
+    vertical-align:top;
+    color:#30693D;
+    margin-left:10px;
+    margin-right:5px;
+    margin-left: 10px;
+    color: #444242;
+    font-weight: 700;
+    font-size: 10px;
+}
+
+.file-remove  {
+    position: absolute;
+    top: 20px;
+    right: 10px;
+    line-height: 15px;
+    cursor: pointer;
+    color: red;
+    margin-right: -10px;
+}

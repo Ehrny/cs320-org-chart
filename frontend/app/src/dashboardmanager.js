@@ -41,7 +41,7 @@ import {
   };
 
 
-export class Dashboard extends React.Component{
+export class Dashboardmanager extends React.Component{
  
 
 
@@ -145,10 +145,7 @@ export class Dashboard extends React.Component{
           });
         }
 
-        importjson(modal4Visible)
-        {
-          this.setState({ modal4Visible });
-        }
+
 
 
         handleSearch = (emplID) => {
@@ -452,14 +449,6 @@ export class Dashboard extends React.Component{
                       </Modal>
                   </SubMenu>
 
-
-                  <Menu.Item key="6" icon={<UploadOutlined />} onClick={()=>this.importjson(true)}>Import</Menu.Item>
-                  <Modal title = "Upload JSON" style={{ top: 20}} visible={this.state.modal4Visible} onOk={() => this.importjson(false)} onCancel={() => this.importjson(false)}>
-                    <p className="dndtitle">Upload Json files from your PC</p>
-                    <div className="dndcontent">
-                      <Drop />
-                    </div>
-                  </Modal>
                   
                   <Menu.Item key="7" icon={<FundViewOutlined />}>Detail</Menu.Item>
                               <hr></hr>

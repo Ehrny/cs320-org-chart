@@ -40,6 +40,11 @@ export class Login extends Component{
             console.log("You're logged in emp");
             history.push('/dashboardemployee');  
         }
+        if ((username === 'manager' && password === 'password')){
+            this.setState({islogin:true});
+            console.log("You're logged in emp");
+            history.push('/dashboardmanager');  
+        }
         e.preventDefault();
     }
 

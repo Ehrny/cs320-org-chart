@@ -1,3 +1,3 @@
-set FLASK_APP=main.py # Set the entry point
-set FLASK_ENV=development # Restart on changes
+set FLASK_APP=main.py
+set FLASK_ENV=development
 python -m flask run
