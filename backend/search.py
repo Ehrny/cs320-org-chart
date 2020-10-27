@@ -21,7 +21,6 @@ def search_field(db: pymongo.MongoClient, company_id: int, search_term: str, fie
         "firstName": "firstName",
         "lastName": "lastName",
         "positionTitle": "positionTitle",
-        "companyName": "companyName",
         "email": "email",
     }
 
