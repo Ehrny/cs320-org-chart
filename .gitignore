@@ -143,3 +143,5 @@ dmypy.json
 cython_debug/
 
 ### End github python gitignore
+
+/frontend/node_modules/*
