@@ -43,11 +43,11 @@ def route_search_field(company_id: str, field: str):
     return search.search_field(db, int(company_id), query, field)
 
 
-# @app.route('/company/<company_id>/login', methods=['POST'])
-# def route_login(company_id: str):
-#     username: str = request.args.get("username", "")
-#     password: str = request.args.get("password", "")
-#     return employees.login(int(company_id), username, password)
+@app.route('/company/<company_id>/login', methods=['POST'])
+def route_login(company_id: str):
+    username: str = request.args.get("username", "")
+    password: str = request.args.get("password", "")
+    return employees.login(int(company_id), username, password)
 
 
 if __name__ == "__main__":

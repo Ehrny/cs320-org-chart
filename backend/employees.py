@@ -4,6 +4,7 @@ import json
 import jwt
 import datetime
 import dns
+import bcrypt
 
 # Return a tree of employees with depth tree depth rooted with employee_doc
 def employee_tree(db: pymongo.MongoClient, employee_doc: dict, tree_depth: int):
@@ -56,7 +57,8 @@ def login(db: pymongo.MongoClient, company_id: int, username: str, password: str
     employee_found: dict = db["Employees"].find_one(pload)
     if employee_found:
         auth_token =  encode_auth_token(db, company_id, username)
-        return auth_token
+        print("Token: " + str(auth_token) + "isManager: " + employee_found["isManager"])
+        return auth_token, employee_found["isManager"]
     else:
         return -1
 
@@ -81,10 +83,15 @@ def decode_auth_token(db: pymongo.MongoClient, auth_token):
     """
     try:
         payload = jwt.decode(auth_token, app.config.get('SECRET_KEY'))
-        return payload['username']
+        return payload['uid']
     except jwt.ExpiredSignatureError:
         return 'Signature expired. Please log in again.'
     except jwt.InvalidTokenError:
         return 'Invalid token. Please log in again.'
+
+def hash_pw(password: str):
+    salt = bcrypt.gensalt()
+    hashed = bcrypt.hashpw(password, salt)
+    return hashed
 
 
