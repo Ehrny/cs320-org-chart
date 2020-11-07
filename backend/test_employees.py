@@ -75,6 +75,6 @@ def test_add_edit_drop():
         "employees": {},
         "actions": {}}
     #need help with this test
-    assert ((employees.add_employee_to_db(test_employee)) == True) #docuement number might be needed here
+    #assert ((employees.add_employee_to_db(test_employee)) == True) #docuement number might be needed here
     assert (employees.edit_employee(test_employee, test_employee_updated)) == test_employee_updated
     assert (employees.drop_employees_from_db(test_employee_updated)) == test_employee_updated
