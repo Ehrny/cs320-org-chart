@@ -45,6 +45,16 @@ def employee_by_id(db: pymongo.MongoClient, company_id: int , employee_id: int, 
     return employee_tree(db, employee_doc, tree_depth)
 
 def employee_manager_by_id(db: pymongo.MongoClient, company_id: int, employee_id: int, levels: int, tree_depth: int):
+    employee_doc: dict = db["Employees"].find_one(
+        {"employeeID": employee_id, "companyID": company_id}
+    )
+    managerID = employee_doc.get("managerID")
+    employee_doc_2: dict = db["Employees"].find_one(
+        {"employeeID": managerID, "companyID": company_id}
+    )
+    return employee_tree(db, employee_doc_2, tree_depth)
+
+def employee_manager_by_id(db: pymongo.MongoClient, company_id: int, employee_id: int, levels: int, tree_depth: int):
     pass # TODO
 
 def login(db: pymongo.MongoClient, company_id: int, username: str, password: str):
@@ -86,5 +96,29 @@ def decode_auth_token(db: pymongo.MongoClient, auth_token):
         return 'Signature expired. Please log in again.'
     except jwt.InvalidTokenError:
         return 'Invalid token. Please log in again.'
+
+def add_employee_to_db(db: pymongo.MongoClient, employee_dict: dict):
+    #add employee
+    return db["Employees"].insert_one(employee_dict)
+
+def drop_employee_from_db(db: pymongo.MongoClient, employee_dict: dict):
+    #get all employees under current and set their manager to new manager
+    #employees under is a cursor object
+    employee_check = db["Employees"].find_one_and_delete(employee_dict)
+
+    employees_under = db["Employees"].find(
+        {"managerID" : employee_dict.get("employeeID"), "companyID" : employee_dict.get("companyID")}
+    )#.limit(2^30)
+    # loop through current managers workers and call the edit their manager
+    for employee in employees_under:
+        db["Employees"].find_one_and_update(employee,
+            {"managerID" : employee_dict.get("managerID")})
+    return employee_check
+
+
+
+def edit_employee(db: pymongo.MongoClient, current_employee:dict, updated: dict):
+    return db["Employees"].find_one_and_update(current_employee, updated,
+                                        return_new_document = True)
 
 

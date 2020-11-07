@@ -43,3 +43,38 @@ def test_employee_by_id_trivial(database_init):
         "actions": { # TODO
         }
     })
+
+def test_add_edit_drop():
+
+    test_employee = {
+        "firstName": "Please",
+        "lastName": "Work",
+        "companyName": "Tiger_Microsystems-emplyees.json",
+        "positionTitle": "Data tester",
+        "isManager": False,
+        "email": "test@gmail.com",
+        "employeeId": "0",
+        "companyId": "1",
+        "startDate": "sometime",
+        "manager": "0",
+        "managerId": 1,
+        "employees": {},
+        "actions": {  }}
+    test_employee_updated = {
+        "firstName": "Edit",
+        "lastName": "Works",
+        "companyName": "Tiger_Microsystems-emplyees.json",
+        "positionTitle": "Data tester",
+        "isManager": False,
+        "email": "test@gmail.com",
+        "employeeId": "0",
+        "companyId": "1",
+        "startDate": "sometime",
+        "manager": "0",
+        "managerId": 1,
+        "employees": {},
+        "actions": {}}
+    #need help with this test
+    assert ((employees.add_employee_to_db(test_employee)) == True) #docuement number might be needed here
+    assert (employees.edit_employee(test_employee, test_employee_updated)) == test_employee_updated
+    assert (employees.drop_employees_from_db(test_employee_updated)) == test_employee_updated
