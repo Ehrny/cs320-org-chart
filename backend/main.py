@@ -64,7 +64,7 @@ def route_drop_employee_from_db(company_id : str, employee_dict: dict):
         return employees.drop_employee_from_db(employee_dict)
     return -1
 #create an app.route for EDIT
-@app.route('/employee/<company_id>/dictionary/<current_employee>/dictionary/<updated_employee>'):
+@app.route('/employee/<company_id>/dictionary/<current_employee>/dictionary/<updated_employee>')
 def route_edit_employee(current_employee: dict, updated_employee):
     return employees.edit_employee(current_employee, updated_employee)
 
