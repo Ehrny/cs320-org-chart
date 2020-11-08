@@ -8,7 +8,7 @@ import links
 import config; config.load_config(".testenv")
 
 @pytest.fixture
-def database_init():
+def db():
     with open('testdata.json') as f:
         testdata = json.load(f)
     
@@ -23,8 +23,8 @@ def database_init():
 
     db["Employees"].drop()
 
-def test_employee_by_id_trivial(database_init: pymongo.MongoClient):
-    res = employees.employee_by_id(database_init, 1, 1, 0)
+def test_employee_by_id_trivial(db: pymongo.MongoClient):
+    res = employees.employee_by_id(db, 1, 1, 0)
     assert json.dumps(res) == json.dumps({
         "firstName" : "Miquel",
         "lastName" : "Pineda",
@@ -42,7 +42,7 @@ def test_employee_by_id_trivial(database_init: pymongo.MongoClient):
         }
     })
 
-def test_add_edit_drop(database_init: pymongo.MongoClient):
+def test_add_edit_drop(db: pymongo.MongoClient):
     test_employee = {
         "firstName": "Please",
         "lastName": "Work",
@@ -72,6 +72,6 @@ def test_add_edit_drop(database_init: pymongo.MongoClient):
         "employees": {},
         "actions": {}}
     #need help with this test
-    assert (employees.add_employee_to_db(database_init, test_employee) == True) #docuement number might be needed here
-    assert (employees.edit_employee(database_init, test_employee, test_employee_updated)) == test_employee_updated
-    assert (employees.drop_employees_from_db(database_init, test_employee_updated)) == test_employee_updated
+    assert (employees.add_employee_to_db(db, test_employee) == True) #docuement number might be needed here
+    assert (employees.edit_employee(db, test_employee, test_employee_updated)) == test_employee_updated
+    assert (employees.drop_employees_from_db(db, test_employee_updated)) == test_employee_updated
