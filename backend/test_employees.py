@@ -76,6 +76,6 @@ def test_add_edit_drop(db: pymongo.MongoClient):
     edit = employees.edit_employee(db, test_employee, test_employee_updated)
     assert (edit.acknowledged == True)
     assert (edit.modified_count == 1)
-    delete = employees.drop_employees_from_db(db, test_employee_updated)
+    delete = employees.drop_employee_from_db(db, test_employee_updated)
     assert (delete.acknowledged == True)
     assert (delete.deleted_count == 1)
