@@ -48,21 +48,20 @@ def employee_by_id(db: pymongo.MongoClient, company_id: int , employee_id: int, 
 def employee_manager_by_id(db: pymongo.MongoClient, company_id: int, employee_id: int, levels: int, tree_depth: int):
     pass # TODO
 
-def login(db: pymongo.MongoClient, company_id: int, username: str, password: str):
+def login(db: pymongo.MongoClient, username: str, password: str):
     pload = {
-        'companyId': company_id,
         'username': username,
         'password': password
     }
     employee_found: dict = db["Employees"].find_one(pload)
     if employee_found:
-        auth_token =  encode_auth_token(db, company_id, username)
+        auth_token =  encode_auth_token(db, username)
         print("Token: " + str(auth_token) + "isManager: " + employee_found["isManager"])
         return auth_token, employee_found["isManager"]
     else:
         return -1
 
-def encode_auth_token(db: pymongo.MongoClient, company_id: int, username: str):
+def encode_auth_token(db: pymongo.MongoClient, username: str):
     """
     Generates the auth_token
     """
@@ -70,7 +69,6 @@ def encode_auth_token(db: pymongo.MongoClient, company_id: int, username: str):
         payload = {
             'exp': datetime.datetime.utcnow() + timedelta(days = 0, hours = 1, seconds = 0),
             'iat': datetime.datetime.utcnow(),
-            'cid': company_id,
             'uid': username
         }
         return jwt.encode(payload, app.config.get('SECRET_KEY'), algorithm='HS256')
