@@ -104,7 +104,7 @@ def add_employee_to_db(db: pymongo.MongoClient, employee_dict: dict):
 def drop_employee_from_db(db: pymongo.MongoClient, dropped_employee: dict):
     #get all employees under current and set their manager to new manager
     #employees under is a cursor object
-    employee_check = db["Employees"].find_one_and_delete(dropped_employee)
+    employee_check = db["Employees"].delete_one(dropped_employee)
 
     employees_under = db["Employees"].find(
         {"managerId" : dropped_employee.get("employeeId"), "companyId" : dropped_employee.get("companyId")}
