@@ -112,7 +112,7 @@ def drop_employee_from_db(db: pymongo.MongoClient, dropped_employee: dict):
     # loop through current managers workers and call the edit their manager
     for employee in employees_under:
         db["Employees"].find_one_and_update(employee,
-            {"managerId" : dropped_employee.get("managerId")})
+            {'$set': {"managerId" : dropped_employee.get("managerId")}})
     return employee_check
 
 
