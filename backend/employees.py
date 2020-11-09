@@ -118,7 +118,7 @@ def drop_employee_from_db(db: pymongo.MongoClient, employee_dict: dict):
 
 
 def edit_employee(db: pymongo.MongoClient, current_employee:dict, updated: dict):
-    return db["Employees"].find_one_and_update(current_employee, updated,
+    return db["Employees"].find_one_and_replace(current_employee, updated,
                                         return_new_document = True)
 
 
