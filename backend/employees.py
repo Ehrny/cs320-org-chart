@@ -57,7 +57,11 @@ def login(db: pymongo.MongoClient, username: str, password: str):
     if employee_found:
         auth_token =  encode_auth_token(db, username)
         print("Token: " + str(auth_token) + "isManager: " + employee_found["isManager"])
-        return auth_token, employee_found["isManager"]
+        load = {
+            'auth_token': auth_token,
+            'isManager': isManager
+        }
+        return load
     else:
         return -1
 
