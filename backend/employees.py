@@ -46,11 +46,11 @@ def employee_by_id(db: pymongo.MongoClient, company_id: int , employee_id: int, 
 
 def employee_manager_by_id(db: pymongo.MongoClient, company_id: int, employee_id: int, levels: int, tree_depth: int):
     employee_doc: dict = db["Employees"].find_one(
-        {"employeeID": employee_id, "companyID": company_id}
+        {"employeeId": employee_id, "companyId": company_id}
     )
     managerID = employee_doc.get("managerID")
     employee_doc_2: dict = db["Employees"].find_one(
-        {"employeeID": managerID, "companyID": company_id}
+        {"employeeId": managerID, "companyId": company_id}
     )
     return employee_tree(db, employee_doc_2, tree_depth)
 
@@ -101,18 +101,18 @@ def add_employee_to_db(db: pymongo.MongoClient, employee_dict: dict):
     #add employee
     return db["Employees"].insert_one(employee_dict)
 
-def drop_employee_from_db(db: pymongo.MongoClient, employee_dict: dict):
+def drop_employee_from_db(db: pymongo.MongoClient, dropped_employee: dict):
     #get all employees under current and set their manager to new manager
     #employees under is a cursor object
-    employee_check = db["Employees"].find_one_and_delete(employee_dict)
+    employee_check = db["Employees"].find_one_and_delete(dropped_employee)
 
     employees_under = db["Employees"].find(
-        {"managerID" : employee_dict.get("employeeID"), "companyID" : employee_dict.get("companyID")}
-    )#.limit(2^30)
+        {"managerId" : dropped_employee.get("employeeId"), "companyId" : dropped_employee.get("companyId")}
+    )
     # loop through current managers workers and call the edit their manager
     for employee in employees_under:
         db["Employees"].find_one_and_update(employee,
-            {"managerID" : employee_dict.get("managerID")})
+            {"managerId" : dropped_employee.get("managerId")})
     return employee_check
 
 
