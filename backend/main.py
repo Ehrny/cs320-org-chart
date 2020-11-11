@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 import employees
 import importfiles
 import search
@@ -47,7 +47,9 @@ def route_search_field(company_id: str, field: str):
 def route_login():
     username: str = request.args.get("username", "")
     password: str = request.args.get("password", "")
-    return employees.login(username, password)
+    retLoad = employees.login(username, password)
+    retVal = jsonify(retLoad)
+    return retVal
 
 
 if __name__ == "__main__":
