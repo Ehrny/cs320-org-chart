@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import logo from './imgs/logo.png';
 import Orgchart from '@unicef/react-org-chart'
@@ -6,7 +6,7 @@ import 'antd/dist/antd.css';
 import Drop from "./drop";
 import './index.css';
 import './dashboard.css';
-import { Layout, Menu, Breadcrumb, Input, Select, Descriptions, Collapse, Modal, Button, Form, InputNumber ,DatePicker, Result } from 'antd';
+import { Layout, AutoComplete, Menu, Breadcrumb, Input, Select, Descriptions, Collapse, Modal, Button, Form, InputNumber ,DatePicker, Result } from 'antd';
 import {
     DesktopOutlined,
     UserOutlined,
@@ -71,8 +71,17 @@ export class Dashboardemployee extends React.Component{
           employeeId : 0,
           email : '',
           startDate : '',
+
+
+          autoList:[],
+
+
         };
-      
+
+   
+        
+
+
         onCollapse = collapsed => {
           console.log(collapsed);
           this.setState({ collapsed });
@@ -115,6 +124,8 @@ export class Dashboardemployee extends React.Component{
 
           if(this.state.searchparam=='First')
           {
+
+
 
             console.log('searching by: ', this.state.searchparam)
             let resp = fetch('/company/1/search/firstName?q=' + emplID)
@@ -217,14 +228,20 @@ export class Dashboardemployee extends React.Component{
                     onSearch={value=>this.handleSearch(value)} /> 
       <h1>
         {this.state.firstName} {this.state.lastName}
-      </h1>
+      
+      </h1> 
+  
   </div>
+
 
 </Header>
 
 <Content style={{ margin: '0 16px' }}>
   <Breadcrumb style={{ margin: '16px 0' }}>
   <Breadcrumb.Item>Matches found: </Breadcrumb.Item>
+  
+
+
   
   </Breadcrumb>
   <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>

@@ -316,6 +316,14 @@ editSubmit() {
                    visible={this.state.modal1Visible}
                    onOk={() => this.addEmp(false)}
                    onCancel={() => this.addEmp(false)}
+
+                   footer={[
+                   
+                    <Button key="back" onClick={() => this.addEmp(false)}>
+                      Return
+                    </Button>,
+                  
+                  ]}
                  >
                   
          
@@ -443,7 +451,15 @@ editSubmit() {
                         drop
                       </Menu.Item>
 
-                      <Modal title="Drop Employee" style={{ top: 20 }} visible={this.state.modal2Visible} onOk={() => this.dropEmp(false)} onCancel={() => this.dropEmp(false)}>
+                      <Modal title="Drop Employee" style={{ top: 20 }} visible={this.state.modal2Visible} onOk={() => this.dropEmp(false)} onCancel={() => this.dropEmp(false)}
+                        footer={[
+                   
+                          <Button key="back" onClick={() => this.dropEmp(false)}>
+                            Return
+                          </Button>,
+                        
+                        ]}
+                        >
                       <p>You selected this employee</p>
                      <hr></hr>
                   <Descriptions Item style={{ textAlign: 'left' }}>
@@ -473,6 +489,14 @@ editSubmit() {
                    visible={this.state.modal3Visible}
                    onOk={() => this.editEmp(false)}
                    onCancel={() => this.editEmp(false)}
+
+                   footer={[
+                   
+                    <Button key="back" onClick={() => this.editEmp(false)}>
+                      Return
+                    </Button>,
+                  
+                  ]}
                  >
 
               <Form {...layout} name="nest-messages" onFinish={this.editonFinish} >

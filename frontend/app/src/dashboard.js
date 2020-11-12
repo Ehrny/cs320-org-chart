@@ -14,7 +14,7 @@ import {
     FundViewOutlined,
     UploadOutlined
   } from '@ant-design/icons';
-
+  import axios from 'axios';
 
 
   const { Panel } = Collapse;
@@ -83,6 +83,65 @@ export class Dashboard extends React.Component{
       startDateTemp: ''
     };
 } 
+
+
+
+
+addSubmit() {
+  // Simple POST request with a JSON body using axios
+  console.log(this.state);
+  const addEmployee = { title: 'Add Employee' };
+  axios.post('http://161.35.55.104/api/addEmployee', addEmployee)
+    .then(response => this.setState({
+      firstName: response.firstNameTemp,
+      lastName: response.lastNameTemp,
+      companyId: response.companyIdTemp,
+      password: response.passwordTemp,
+      positionTitle: response.positionTitleTemp,
+      companyName: response.companyNameTemp,
+      isManager: response.isManagerTemp,
+      employeeId: response.employeeIdTemp,
+      email: response.emailTemp,
+      startDate: response.startDateTemp,
+
+    }));
+}
+dropSubmit() {
+  // Simple POST request with a JSON body using axios
+  const dropEmployee = { title: 'Drop Employee' };
+  axios.post('http://161.35.55.104/api/dropEmployee', dropEmployee)
+    .then(response => this.setState({
+      firstName: response.firstName,
+      lastName: response.lastName,
+      companyId: response.companyId,
+      password: response.password,
+      positionTitle: response.positionTitle,
+      companyName: response.companyName,
+      isManager: response.isManager,
+      employeeId: response.employeeId,
+      email: response.email,
+      startDate: response.startDate,
+    }));
+}
+editSubmit() {
+  // Simple POST request with a JSON body using axios
+  const editEmployee = { title: 'Edit Employee' };
+  axios.post('http://161.35.55.104/api/editEmployee', editEmployee)
+    .then(response => this.setState({
+      firstName: response.firstNameTemp,
+      lastName: response.lastNameTemp,
+      companyId: response.companyIdTemp,
+      password: response.passwordTemp,
+      positionTitle: response.positionTitleTemp,
+      companyName: response.companyNameTemp,
+      isManager: response.isManagerTemp,
+      employeeId: response.employeeIdTemp,
+      email: response.emailTemp,
+      startDate: response.startDateTemp,
+
+    }));
+}
+
 
 
    //print the Add Object
@@ -262,6 +321,15 @@ export class Dashboard extends React.Component{
                    visible={this.state.modal1Visible}
                    onOk={() => this.addEmp(false)}
                    onCancel={() => this.addEmp(false)}
+
+
+                   footer={[
+                   
+                    <Button key="back" onClick={() => this.addEmp(false)}>
+                      Return
+                    </Button>,
+                  
+                  ]}
                  >
                   
          
@@ -345,7 +413,16 @@ export class Dashboard extends React.Component{
                         drop
                       </Menu.Item>
 
-                      <Modal title="Drop Employee" style={{ top: 20 }} visible={this.state.modal2Visible} onOk={() => this.dropEmp(false)} onCancel={() => this.dropEmp(false)}>
+                      <Modal title="Drop Employee" style={{ top: 20 }} visible={this.state.modal2Visible} onOk={() => this.dropEmp(false)} onCancel={() => this.dropEmp(false)}
+                      
+                      footer={[
+                       
+                        <Button key="back" onClick={() =>this.dropEmp(false)}>
+                          Return
+                        </Button>,
+                      
+                      ]}
+                      >
                       <p>You selected this employee</p>
                      <hr></hr>
                   <Descriptions Item style={{ textAlign: 'left' }}>
@@ -360,10 +437,11 @@ export class Dashboard extends React.Component{
                   <Descriptions.Item label="Start Date">{this.state.startDate}</Descriptions.Item>
                   <Descriptions.Item label="Email">{this.state.email}</Descriptions.Item>
                           </Descriptions>
-
-                          <Button type="primary" htmlType="submit">
+                          
+                          <Button type="primary" htmlType="submit" onClick={()=>this.dropSubmit()}>
                                       Submit
                                     </Button>
+                  
                       </Modal>
 
 
@@ -375,6 +453,15 @@ export class Dashboard extends React.Component{
                    visible={this.state.modal3Visible}
                    onOk={() => this.editEmp(false)}
                    onCancel={() => this.editEmp(false)}
+                   
+                   footer={[
+                   
+                    <Button key="back" onClick={() => this.editEmp(false)}>
+                      Return
+                    </Button>,
+                  
+                  ]}
+
                  >
 
               <Form {...layout} name="nest-messages" onFinish={this.editonFinish} >
