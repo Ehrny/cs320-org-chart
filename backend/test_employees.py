@@ -43,40 +43,104 @@ def test_employee_by_id_trivial(db: pymongo.MongoClient):
     })
 
 def test_add_edit_drop(db: pymongo.MongoClient):
-    test_employee = {
-        "firstName": "Please",
-        "lastName": "Work",
-        "companyName": "Tiger_Microsystems-emplyees.json",
-        "positionTitle": "Data tester",
-        "isManager": False,
-        "email": "test@gmail.com",
-        "employeeId": "0",
-        "companyId": "1",
-        "startDate": "sometime",
-        "manager": "1",
-        "managerId": 0,
-        "employees": {},
-        "actions": {}}
-    test_employee_updated = {
-        "firstName": "Edit",
-        "lastName": "Works",
-        "companyName": "Tiger_Microsystems-emplyees.json",
-        "positionTitle": "Data tester",
-        "isManager": False,
-        "email": "test@gmail.com",
-        "employeeId": "0",
-        "companyId": "1",
-        "startDate": "sometime",
-        "manager": "1",
-        "managerId": 0,
-        "employees": {},
-        "actions": {}}
-   
-    assert (employees.add_employee_to_db(db, test_employee).acknowledged == True)
-    edit = employees.edit_employee(db, test_employee, test_employee_updated)
+
+    CEO = {
+        "firstName" : "Erika",
+        "lastName" : "Wilcox",
+        "companyId" : 2,
+        "password" : "wilcoxer",
+        "positionTitle" : "CEO",
+        "companyName" : "Tiger Microsystems",
+        "isManager" : True,
+        "employeeId" : 1,
+        "email" : "Erika_Wilcox@tigermicrosystems.com",
+        "startDate" : "1995-05-27"
+    }
+
+    employee1 = {
+        "firstName" : "Salvatore",
+        "lastName" : "Gallagher",
+        "companyId" : 2,
+        "password" : "gallaghersa",
+        "positionTitle" : "Engineering Manager",
+        "companyName" : "Tiger Microsystems",
+        "isManager" : True,
+        "employeeId" : 2,
+        "managerId" : 1,
+        "email" : "Salvatore_Gallagher@tigermicrosystems.com",
+        "startDate" : "1999-05-25"
+    }
+
+    employee2 = {
+        "firstName" : "Abdul",
+        "lastName" : "Humphrey",
+        "companyId" : 2,
+        "password" : "humphreyab",
+        "positionTitle" : "Engineering Manager",
+        "companyName" : "Tiger Microsystems",
+        "isManager" : True,
+        "employeeId" : 3,
+        "managerId" : 2,
+        "email" : "Abdul_Humphrey@tigermicrosystems.com",
+        "startDate" : "2010-09-22"
+    }
+
+    employee2_modified = {
+        "firstName" : "Abdul2",
+        "lastName" : "Humphrey",
+        "companyId" : 2,
+        "password" : "humphreyab",
+        "positionTitle" : "Engineering Manager",
+        "companyName" : "Tiger Microsystems",
+        "isManager" : True,
+        "employeeId" : 3,
+        "managerId" : 2,
+        "email" : "Abdul_Humphrey@tigermicrosystems.com",
+        "startDate" : "2010-09-22"
+    }
+
+    
+    # test_employee = {
+    #     "firstName": "Please",
+    #     "lastName": "Work",
+    #     "companyName": "Tiger_Microsystems-emplyees.json",
+    #     "positionTitle": "Data tester",
+    #     "isManager": False,
+    #     "email": "test@gmail.com",
+    #     "employeeId": "0",
+    #     "companyId": "1",
+    #     "startDate": "sometime",
+    #     "manager": "0",
+    #     "managerId": 1,
+    #     "employees": {},
+    #     "actions": {}}
+    # test_employee_updated = {
+    #     "firstName": "Edit",
+    #     "lastName": "Works",
+    #     "companyName": "Tiger_Microsystems-emplyees.json",
+    #     "positionTitle": "Data tester",
+    #     "isManager": False,
+    #     "email": "test@gmail.com",
+    #     "employeeId": "0",
+    #     "companyId": "1",
+    #     "startDate": "sometime",
+    #     "manager": "0",
+    #     "managerId": 1,
+    #     "employees": {},
+    #     "actions": {}}
+
+    #Add
+    assert (employees.add_employee_to_db(db, CEO).acknowledged == True)
+    assert (employees.add_employee_to_db(db, employee1).acknowledged == True)
+    assert (employees.add_employee_to_db(db, employee2).acknowledged == True)
+
+    #Edit
+    edit = employees.edit_employee(db, employee2, employee2_modified)
     assert (edit.acknowledged == True)
     assert (edit.modified_count == 1)
-    delete = employees.drop_employee_from_db(db, test_employee_updated)
+    
+    #Delete
+    delete = employees.drop_employee_from_db(db, employee1)
     assert (delete.acknowledged == True)
     assert (delete.deleted_count == 1)
 
