@@ -14,7 +14,8 @@ import {
     FundViewOutlined,
     UploadOutlined
   } from '@ant-design/icons';
-  
+
+ 
 
   const { Panel } = Collapse;
   function callback(key) {
@@ -72,6 +73,8 @@ export class Dashboardemployee extends React.Component{
           email : '',
           startDate : '',
 
+          viewDetail:false,
+
 
           autoList:[],
 
@@ -81,6 +84,9 @@ export class Dashboardemployee extends React.Component{
    
         
 
+        viewDetail(modal4Visible) {
+          this.setState({ modal4Visible });
+        }
 
         onCollapse = collapsed => {
           console.log(collapsed);
@@ -192,14 +198,51 @@ export class Dashboardemployee extends React.Component{
           const downloadPdfId = 'download-pdf'
 
           return (
+<<<<<<< Updated upstream
             <Layout style={{ minHeight: '100vh' }}>
-              <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
+              <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse} theme="light" style={{background:'#ccccff'}}>
               
-                <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
+                <Menu theme="light" defaultSelectedKeys={['1']} mode="inline"  style={{ minHeight: '100vh' },{background:'#ccccff'}}>
+              
+            
+=======
+            <Layout style={{ minHeight: '100vh' }} >
+              <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}  theme="light" >
+              
+                <Menu theme="light" defaultSelectedKeys={['1']} mode="inline" >
                   
         <Menu.Item key="2" icon={<DesktopOutlined />}>View</Menu.Item>
+>>>>>>> Stashed changes
                  
-        <Menu.Item key="6" icon={<FundViewOutlined />}>Detail</Menu.Item>
+        <Menu.Item key="6" onClick={()=>this.viewDetail(true)} icon={<FundViewOutlined/>}>Detail</Menu.Item>
+               
+                      <Modal title="View Employee" style={{ top: 20 }} visible={this.state.modal4Visible} onOk={() => this.viewDetail(false)} onCancel={() => this.viewDetail(false)}
+
+    footer={[
+                   
+  <Button key="back" onClick={() => this.viewDetail(false)}>
+    OK
+  </Button>,
+
+]}
+                      >
+                      <p>Employee detail:</p>
+                     <hr></hr>
+                  <Descriptions Item style={{ textAlign: 'left' }}>
+                  <Descriptions.Item label="First Name" bordered>{this.state.firstName}</Descriptions.Item>
+                  <Descriptions.Item label="Last Name">{this.state.lastName}</Descriptions.Item>
+                  <Descriptions.Item label="Position">{this.state.positionTitle}</Descriptions.Item>
+                  <Descriptions.Item label="Company">{this.state.companyName}</Descriptions.Item>
+                  <Descriptions.Item label="Company ID">{this.state.companyId}</Descriptions.Item>
+                  <Descriptions.Item label="Manager">{this.state.isManager.toString()}</Descriptions.Item>
+                  <Descriptions.Item label="Employee ID">{this.state.employeeId}</Descriptions.Item>
+                  <Descriptions.Item label="Manager ID">{this.state.man}</Descriptions.Item>
+                  <Descriptions.Item label="Start Date">{this.state.startDate}</Descriptions.Item>
+                  <Descriptions.Item label="Email">{this.state.email}</Descriptions.Item>
+                          </Descriptions>
+                          
+                  
+                      </Modal>
                   
                     <hr></hr>
 
@@ -255,16 +298,7 @@ export class Dashboardemployee extends React.Component{
 
   <dir className ="test" >
       <hr></hr>
-    <Collapse defaultActiveKey={['1']} onChange={callback}>
-    <Panel header="Detail Info" key="1" >
-<Descriptions Item style={{ textAlign: 'left' }}>
-<Descriptions.Item label="First Name" bordered>{this.state.firstName}</Descriptions.Item>
-<Descriptions.Item label="Last Name">{this.state.lastName}</Descriptions.Item>
-<Descriptions.Item label="Position">{this.state.positionTitle}</Descriptions.Item>
-<Descriptions.Item label="Company">{this.state.companyName}</Descriptions.Item>
-        </Descriptions>
-      </Panel>
-    </Collapse>
+   
   </dir>
 </Layout>
 </Layout>

@@ -58,7 +58,7 @@ export class Dashboard extends React.Component{
   addEmp: false,
   dropEmp: false,
   editEmp: false,
-  
+  viewDetail:false,
   
   firstName : '',
   lastName : '',
@@ -86,6 +86,9 @@ export class Dashboard extends React.Component{
 
 
 
+viewDetail(modal5Visible) {
+  this.setState({ modal5Visible });
+}
 
 addSubmit() {
   // Simple POST request with a JSON body using axios
@@ -307,9 +310,6 @@ editSubmit() {
               <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
 
                 <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
-
-                  <Menu.Item key="2" onClick={this.view}  icon={<DesktopOutlined />}>View</Menu.Item>
-
 
 
                   <SubMenu key="sub1" icon={<UserOutlined />} title="Manage">
@@ -596,7 +596,35 @@ editSubmit() {
                     </div>
                   </Modal>
                   
-                  <Menu.Item key="7" icon={<FundViewOutlined />}>Detail</Menu.Item>
+                  <Menu.Item onClick={()=>this.viewDetail(true)} icon={<FundViewOutlined/>}>Detail</Menu.Item>
+               
+               <Modal title="View Employee" style={{ top: 20 }} visible={this.state.modal5Visible} onOk={() => this.viewDetail(false)} onCancel={() => this.viewDetail(false)}
+
+footer={[
+            
+<Button key="back" onClick={() => this.viewDetail(false)}>
+OK
+</Button>,
+
+]}
+               >
+               <p>Employee detail:</p>
+              <hr></hr>
+           <Descriptions Item style={{ textAlign: 'left' }}>
+           <Descriptions.Item label="First Name" bordered>{this.state.firstName}</Descriptions.Item>
+           <Descriptions.Item label="Last Name">{this.state.lastName}</Descriptions.Item>
+           <Descriptions.Item label="Position">{this.state.positionTitle}</Descriptions.Item>
+           <Descriptions.Item label="Company">{this.state.companyName}</Descriptions.Item>
+           <Descriptions.Item label="Company ID">{this.state.companyId}</Descriptions.Item>
+           <Descriptions.Item label="Manager">{this.state.isManager.toString()}</Descriptions.Item>
+           <Descriptions.Item label="Employee ID">{this.state.employeeId}</Descriptions.Item>
+           <Descriptions.Item label="Manager ID">{this.state.man}</Descriptions.Item>
+           <Descriptions.Item label="Start Date">{this.state.startDate}</Descriptions.Item>
+           <Descriptions.Item label="Email">{this.state.email}</Descriptions.Item>
+                   </Descriptions>
+                   
+           
+               </Modal>
                               <hr></hr>
                     <Menu.Item key="1" icon={<LogoutOutlined />} >
                       <a href="./login" onClick={this.lgin}>logout</a>
@@ -642,22 +670,7 @@ editSubmit() {
 
                     <dir className ="test" >
                         <hr></hr>
-                      <Collapse defaultActiveKey={['1']} onChange={callback}>
-                      <Panel header="Detail Info" key="1" >
-                <Descriptions Item style={{ textAlign: 'left' }}>
-                  <Descriptions.Item label="First Name" bordered>{this.state.firstName}</Descriptions.Item>
-                  <Descriptions.Item label="Last Name">{this.state.lastName}</Descriptions.Item>
-                  <Descriptions.Item label="Position">{this.state.positionTitle}</Descriptions.Item>
-                  <Descriptions.Item label="Company">{this.state.companyName}</Descriptions.Item>
-                  <Descriptions.Item label="Company ID">{this.state.companyId}</Descriptions.Item>
-                  <Descriptions.Item label="Manager">{this.state.isManager.toString()}</Descriptions.Item>
-                  <Descriptions.Item label="Employee ID">{this.state.employeeId}</Descriptions.Item>
-                  <Descriptions.Item label="Manager ID">{this.state.man}</Descriptions.Item>
-                  <Descriptions.Item label="Start Date">{this.state.startDate}</Descriptions.Item>
-                  <Descriptions.Item label="Email">{this.state.email}</Descriptions.Item>
-                          </Descriptions>
-                        </Panel>
-                      </Collapse>
+                  
                     </dir>
               </Layout>
             </Layout>
