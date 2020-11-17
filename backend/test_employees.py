@@ -53,8 +53,8 @@ def test_add_edit_drop(db: pymongo.MongoClient):
         "employeeId": "0",
         "companyId": "1",
         "startDate": "sometime",
-        "manager": "0",
-        "managerId": 1,
+        "manager": "1",
+        "managerId": 0,
         "employees": {},
         "actions": {}}
     test_employee_updated = {
@@ -67,8 +67,8 @@ def test_add_edit_drop(db: pymongo.MongoClient):
         "employeeId": "0",
         "companyId": "1",
         "startDate": "sometime",
-        "manager": "0",
-        "managerId": 1,
+        "manager": "1",
+        "managerId": 0,
         "employees": {},
         "actions": {}}
    
@@ -79,3 +79,37 @@ def test_add_edit_drop(db: pymongo.MongoClient):
     delete = employees.drop_employee_from_db(db, test_employee_updated)
     assert (delete.acknowledged == True)
     assert (delete.deleted_count == 1)
+
+
+def test_dropping_to_change_manager(db: pymongo.MongoClient):
+    test_employee = {
+        "firstName": "Please",
+        "lastName": "Work",
+        "companyName": "Tiger_Microsystems-emplyees.json",
+        "positionTitle": "Data tester",
+        "isManager": False,
+        "email": "test@gmail.com",
+        "employeeId": "0",
+        "companyId": "1",
+        "startDate": "sometime",
+        "manager": "1",
+        "managerId": 1,
+        "employees": {},
+        "actions": {}}
+    test_employee_two = {
+        "firstName": "Drop",
+        "lastName": "Works",
+        "companyName": "Tiger_Microsystems-emplyees.json",
+        "positionTitle": "Data tester",
+        "isManager": False,
+        "email": "test@gmail.com",
+        "employeeId": "100000",
+        "companyId": "1",
+        "startDate": "sometime",
+        "manager": "0",
+        "managerId": 0,
+        "employees": {},
+        "actions": {}}
+    assert(employees.add_employee_to_db(db, test_employee).acknowledged == True)
+    assert (employees.add_employee_to_db(db, test_employee_two).acknowledged == True)
+    assert ()

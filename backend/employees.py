@@ -54,8 +54,6 @@ def employee_manager_by_id(db: pymongo.MongoClient, company_id: int, employee_id
     )
     return employee_tree(db, employee_doc_2, tree_depth)
 
-def employee_manager_by_id(db: pymongo.MongoClient, company_id: int, employee_id: int, levels: int, tree_depth: int):
-    pass # TODO
 
 def login(db: pymongo.MongoClient, company_id: int, username: str, password: str):
     pload = {
@@ -99,25 +97,25 @@ def decode_auth_token(db: pymongo.MongoClient, auth_token):
 
 def add_employee_to_db(db: pymongo.MongoClient, employee_dict: dict):
     #add employee
+    #change to take in json
     return db["Employees"].insert_one(employee_dict)
 
-def drop_employee_from_db(db: pymongo.MongoClient, employee_dict: dict):
+def drop_employee_from_db(db: pymongo.MongoClient, dropped_employee: dict):
     #get all employees under current and set their manager to new manager
     #employees under is a cursor object
-    employee_check = db["Employees"].find_one_and_delete(employee_dict)
+    employee_check = db["Employees"].find_one_and_delete(dropped_employee)
 
     employees_under = db["Employees"].find(
-        {"managerID" : employee_dict.get("employeeID"), "companyID" : employee_dict.get("companyID")}
+        {"managerID" : dropped_employee.get("employeeID"), "companyID" : dropped_employee.get("companyID")}
     )#.limit(2^30)
     # loop through current managers workers and call the edit their manager
     for employee in employees_under:
         db["Employees"].find_one_and_update(employee,
-            {"managerID" : employee_dict.get("managerID")})
+            {"managerID" : dropped_employee.get("managerID")})
     return employee_check
 
 
-
-def edit_employee(db: pymongo.MongoClient, current_employee:dict, updated: dict):
-    return db["Employees"].replace_one(current_employee, updated) #return_document=pymongo.ReturnDocument.AFTER)
+def edit_employee(db: pymongo.MongoClient, employee_Id: str, updated: dict):
+    return db["Employees"].replace_one(db["Employees"].find_one({"employeeID": employee_Id}), updated) #return_document=pymongo.ReturnDocument.AFTER)
 
 

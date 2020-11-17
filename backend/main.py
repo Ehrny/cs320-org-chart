@@ -50,24 +50,32 @@ def route_search_field(company_id: str, field: str):
 #     return employees.login(int(company_id), username, password)
 
 #create an app.route for ADD
-@app.route('/company/<company_id>/dictionary/<employee_dict>/add_to_db')
-def route_add_employee_to_db(company_id: str, employee_dict: dict):
+@app.route('/import/company/<company_id>/add_to_db', ['POST'])
+def route_add_employee_to_db(company_id: str):
     #checks to make sure employee is in correct company
-    if (company_id == employee_dict.get(company_id)):
-        return employees.add_employee_to_db(employee_dict)
+    if (request.get_json() != None):
+        employee_dict = request.get_json()
+        if (company_id == employee_dict.get(company_id)):
+            return employees.add_employee_to_db(db, employee_dict)
     return -1
 
 #create an app.route for DROP
-@app.route('/company/<company_id>/dictionary/<employee_dict>/drop_from_db')
-def route_drop_employee_from_db(company_id : str, employee_dict: dict):
-    if (company_id == employee_dict.get(company_id)):
-        return employees.drop_employee_from_db(employee_dict)
+@app.route('/import/company/<company_id>/drop_from_db/', ['POST'])
+def route_drop_employee_from_db(company_id : str):
+    if (request.get_json() != None):
+        employee_dict = request.get_json()
+        if (company_id == employee_dict.get(company_id)):
+            return employees.drop_employee_from_db(db, employee_dict)
     return -1
-#create an app.route for EDIT
-@app.route('/employee/<company_id>/dictionary/<current_employee>/dictionary/<updated_employee>')
-def route_edit_employee(current_employee: dict, updated_employee):
-    return employees.edit_employee(current_employee, updated_employee)
 
+#create an app.route for EDIT
+@app.route('/import/company/<company_id>/employee/<employee_id>', ['POST'])
+def route_edit_employee(company_id : str, current_employee_id: str):
+    if (request.get_json() != None):
+        updated_employee = request.get_json()
+        if (company_id == updated_employee.get(company_id)):
+            return employees.edit_employee(db, current_employee_id, updated_employee)
+    return -1
 
 
 if __name__ == "__main__":
