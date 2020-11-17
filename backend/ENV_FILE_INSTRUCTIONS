@@ -1,0 +1,9 @@
+Download the env files pinned in slack general, and save them to backend/.env and backend/.testenv
+
+Format:
+MONGO_DB=DBName
+MONGO_USER=UserName
+MONGO_PW=Password
+MONGO_URL=localhost:27170 # OPTIONAL, overrides username and password.
+
+the file backend/.env is loaded for running the app manually, backend/.testenv is used for pytest. The tests delete all of the content in the database you choose so make sure its a database you don't care about.
