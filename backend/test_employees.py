@@ -176,4 +176,3 @@ def test_dropping_to_change_manager(db: pymongo.MongoClient):
         "actions": {}}
     assert(employees.add_employee_to_db(db, test_employee).acknowledged == True)
     assert (employees.add_employee_to_db(db, test_employee_two).acknowledged == True)
-    assert ()
