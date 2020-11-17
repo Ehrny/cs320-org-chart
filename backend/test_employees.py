@@ -135,7 +135,7 @@ def test_add_edit_drop(db: pymongo.MongoClient):
     assert (employees.add_employee_to_db(db, employee2).acknowledged == True)
 
     #Edit
-    edit = employees.edit_employee(db, employee2, employee2_modified)
+    edit = employees.edit_employee(db, employee2.get("employeeId"), employee2_modified)
     assert (edit.acknowledged == True)
     assert (edit.modified_count == 1)
     
