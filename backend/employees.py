@@ -42,6 +42,8 @@ def employee_by_id(db: pymongo.MongoClient, company_id: int , employee_id: int, 
     employee_doc: dict = db["Employees"].find_one(
         {"employeeId": employee_id, "companyId": company_id}
     )
+    if employee_doc is None:
+        return json.dumps({ "error": "not found"})
     return employee_tree(db, employee_doc, tree_depth)
 
 def employee_manager_by_id(db: pymongo.MongoClient, company_id: int, employee_id: int, levels: int, tree_depth: int):
@@ -98,7 +100,9 @@ def decode_auth_token(db: pymongo.MongoClient, auth_token):
 def add_employee_to_db(db: pymongo.MongoClient, employee_dict: dict):
     #add employee
     #change to take in json
-    return db["Employees"].insert_one(employee_dict)
+    print("ATTEMPT ADD")
+    db["Employees"].insert_one(employee_dict)
+    return "success?"
 
 def drop_employee_from_db(db: pymongo.MongoClient, dropped_employee: dict):
     #get all employees under current and set their manager to new manager

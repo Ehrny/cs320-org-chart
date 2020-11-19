@@ -3,6 +3,7 @@ import employees
 import importfiles
 import search
 import pymongo
+import json
 import config; config.load_config(".env")
 
 app = Flask(__name__)
@@ -50,32 +51,55 @@ def route_search_field(company_id: str, field: str):
 #     return employees.login(int(company_id), username, password)
 
 #create an app.route for ADD
-@app.route('/import/company/<company_id>/add_to_db', ['POST'])
+""" EXAMPLE CALL
+fetch("/import/company/1/add_to_db", {
+  method: "POST",
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+        "firstName" : "Miquel",
+        "lastName" : "Pineda",
+        "companyId" : 1,
+        "password" : "pinedami",
+        "positionTitle" : "CEO",
+        "companyName" : "Cyclone Aviation",
+        "isManager" : true,
+        "employeeId" : 1,
+        "email" : "Miquel_Pineda@cycloneaviation.com",
+        "startDate" : "2016-05-04"
+  })
+}).then(res=>console.log(res));
+"""
+@app.route('/import/company/<company_id>/add_to_db', methods=['POST'])
 def route_add_employee_to_db(company_id: str):
+    print("ADD")
     #checks to make sure employee is in correct company
     if (request.get_json() != None):
         employee_dict = request.get_json()
-        if (company_id == employee_dict.get(company_id)):
+        print(employee_dict)
+        if (int(company_id) == employee_dict.get("companyId")):
+            print("Company id")
             return employees.add_employee_to_db(db, employee_dict)
-    return -1
+    return json.dumps({ "error": "no json body probably" })
 
 #create an app.route for DROP
-@app.route('/import/company/<company_id>/drop_from_db/', ['POST'])
+@app.route('/import/company/<company_id>/drop_from_db/', methods=['POST'])
 def route_drop_employee_from_db(company_id : str):
     if (request.get_json() != None):
         employee_dict = request.get_json()
         if (company_id == employee_dict.get(company_id)):
             return employees.drop_employee_from_db(db, employee_dict)
-    return -1
+    return json.dumps({ "error": "unknown" })
 
 #create an app.route for EDIT
-@app.route('/import/company/<company_id>/employee/<employee_id>', ['POST'])
+@app.route('/import/company/<company_id>/employee/<employee_id>', methods=['POST'])
 def route_edit_employee(company_id : str, current_employee_id: str):
     if (request.get_json() != None):
         updated_employee = request.get_json()
         if (company_id == updated_employee.get(company_id)):
             return employees.edit_employee(db, current_employee_id, updated_employee)
-    return -1
+    return json.dumps({ "error": "unknown" })
 
 
 if __name__ == "__main__":
