@@ -98,9 +98,6 @@ def decode_auth_token(db: pymongo.MongoClient, auth_token):
         return 'Invalid token. Please log in again.'
 
 def add_employee_to_db(db: pymongo.MongoClient, employee_dict: dict):
-    #add employee
-    #change to take in json
-    print("ATTEMPT ADD")
     db["Employees"].insert_one(employee_dict)
     return "success?"
 
@@ -108,16 +105,17 @@ def drop_employee_from_db(db: pymongo.MongoClient, dropped_employee: dict):
     #get all employees under current and set their manager to new manager
     #employees under is a cursor object
 
-    employee_check = db["Employees"].delete_one(dropped_employee)
+    print("deleting")
+    employee_check = db["Employees"].delete_one({"employeeId": dropped_employee["employeeId"]})
 
     employees_under = db["Employees"].find(
         {"managerId" : dropped_employee.get("employeeId"), "companyId" : dropped_employee.get("companyId")}
     )
     # loop through current managers workers and call the edit their manager
     for employee in employees_under:
-        db["Employees"].find_one_and_update(employee,
+        db["Employees"].update(employee,
             {'$set': {"managerId" : dropped_employee.get("managerId")}})
-    return employee_check
+    return "success?"
 
 
 def edit_employee(db: pymongo.MongoClient, employee_Id: str, updated: dict):

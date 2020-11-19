@@ -73,22 +73,19 @@ fetch("/import/company/1/add_to_db", {
 """
 @app.route('/import/company/<company_id>/add_to_db', methods=['POST'])
 def route_add_employee_to_db(company_id: str):
-    print("ADD")
     #checks to make sure employee is in correct company
     if (request.get_json() != None):
         employee_dict = request.get_json()
-        print(employee_dict)
         if (int(company_id) == employee_dict.get("companyId")):
-            print("Company id")
             return employees.add_employee_to_db(db, employee_dict)
     return json.dumps({ "error": "no json body probably" })
 
 #create an app.route for DROP
-@app.route('/import/company/<company_id>/drop_from_db/', methods=['POST'])
+@app.route('/import/company/<company_id>/drop_from_db', methods=['POST'])
 def route_drop_employee_from_db(company_id : str):
     if (request.get_json() != None):
         employee_dict = request.get_json()
-        if (company_id == employee_dict.get(company_id)):
+        if (int(company_id) == employee_dict.get("companyId")):
             return employees.drop_employee_from_db(db, employee_dict)
     return json.dumps({ "error": "unknown" })
 
