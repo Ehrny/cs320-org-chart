@@ -98,6 +98,17 @@ def route_search_field(company_id: str, field: str):
     return search.search_field(db, int(company_id), query, field)
 
 
+# @app.route('/import/
+
+#create a new request for transfer employee
+@app.route('/import/company/<company_id>/create_request', methods = ['POST'])
+def route_create_new_request(company_id: str):
+    if (request.get_json() != None):
+        request_dict = request.get_json()
+        if (company_id == request_dict.get(company_id)):
+            return request_dict.create_request(db, request_dict)
+    return -1
+
 # @app.route('/company/<company_id>/login', methods=['POST'])
 # def route_login(company_id: str):
 #     username: str = request.args.get("username", "")
