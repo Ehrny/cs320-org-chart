@@ -11,8 +11,9 @@ import dns
 #    request = {
 #        "type" : "fire, add, move",
 #        "company_id" : company_id,
-#        "to_manager": employee_id,
-#        "from_manager" : employee_id2,
+#        "moved_employee": employee_id,
+#        "to_manager": employee_id2,
+#        "from_manager" : employee_id3,
 #        "approvals": {
 #             "employee_id" : False,
 #             "employee_id2" : False
@@ -32,9 +33,14 @@ def approve_request():
 def deny_request():
     pass
 
-def get_requests():
+def get_requests(db: pymongo.MongoClient, employee_id: str):
+    cursor = db["Requests"].find(request_dict["approvals"].has_key(employee_id))
+    list = []
+    for c in cursor:
+        list.add(c)
+    return list
 
-    pass
+
 
 def create_request(db: pymongo.MongoClient, request_dict: dict):
     if (validate_request(request_dict) != -1):

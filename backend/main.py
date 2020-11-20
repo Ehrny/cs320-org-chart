@@ -98,8 +98,13 @@ def route_search_field(company_id: str, field: str):
     return search.search_field(db, int(company_id), query, field)
 
 
-# @app.route('/import/
-
+# @app.route('/import/company/<company_id>/create_request', methods = ['POST']
+# valid arguments need 1 request dictionary, requirements in requests.py
+# Method: GET
+# Body: None
+# Headers: default
+# URL Parameters: q: string, the query with which to perform text search on the given field.
+# Returns: 1 or -1 depending on if it passes correctly into the db[requests]
 #create a new request for transfer employee
 @app.route('/import/company/<company_id>/create_request', methods = ['POST'])
 def route_create_new_request(company_id: str):
@@ -107,6 +112,13 @@ def route_create_new_request(company_id: str):
         request_dict = request.get_json()
         if (company_id == request_dict.get(company_id)):
             return request_dict.create_request(db, request_dict)
+    return -1
+
+@app.route('/company/<company_id>/employee/<employee_id>/get_requests/')
+def route_get_requests(company_id: str, employee_id):
+
+    if (company_id == request_dict.get(company_id)):
+        return request_dict.get_requests(db, employee_id)
     return -1
 
 # @app.route('/company/<company_id>/login', methods=['POST'])
