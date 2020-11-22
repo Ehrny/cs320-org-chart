@@ -50,6 +50,18 @@ def route_search_field(company_id: str, field: str):
 #     password: str = request.args.get("password", "")
 #     return employees.login(int(company_id), username, password)
 
+
+
+#create a new request for transfer employee
+@app.route('/import/company/<company_id>/create_request', methods = ['POST'])
+def route_create_new_request(company_id: str):
+    if (request.get_json() != None):
+        request_dict = request.get_json()
+        if (company_id == request_dict.get(company_id)):
+            return request_dict.create_request(db, request_dict)
+    return -1
+
+
 #create an app.route for ADD
 """ EXAMPLE CALL
 fetch("/import/company/1/add_to_db", {
@@ -81,7 +93,7 @@ def route_add_employee_to_db(company_id: str):
     return json.dumps({ "error": "no json body probably" })
 
 #create an app.route for DROP
-@app.route('/import/company/<company_id>/drop_from_db', methods=['POST'])
+@app.route('/import/company/<company_id>/drop_from_db/', methods = ['POST'])
 def route_drop_employee_from_db(company_id : str):
     if (request.get_json() != None):
         employee_dict = request.get_json()
@@ -90,7 +102,7 @@ def route_drop_employee_from_db(company_id : str):
     return json.dumps({ "error": "unknown" })
 
 #create an app.route for EDIT
-@app.route('/import/company/<company_id>/employee/<employee_id>', methods=['POST'])
+@app.route('/import/company/<company_id>/employee/<employee_id>', methods = ['POST'])
 def route_edit_employee(company_id : str, current_employee_id: str):
     if (request.get_json() != None):
         updated_employee = request.get_json()
