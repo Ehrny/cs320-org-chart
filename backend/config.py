@@ -24,3 +24,6 @@ def load_config(configname):
     
     MONGO_DB = os.getenv("MONGO_DB")
 
+
+    # mongodb://localhost:27017/
+

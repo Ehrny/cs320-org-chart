@@ -4,6 +4,8 @@ import json
 import jwt
 import datetime
 import dns
+import bcrypt
+# from datetime import datetime, date, time, timedelta
 
 # Return a tree of employees with depth tree depth rooted with employee_doc
 def employee_tree(db: pymongo.MongoClient, employee_doc: dict, tree_depth: int):
@@ -47,31 +49,39 @@ def employee_by_id(db: pymongo.MongoClient, company_id: int , employee_id: int, 
 def employee_manager_by_id(db: pymongo.MongoClient, company_id: int, employee_id: int, levels: int, tree_depth: int):
     pass # TODO
 
-def login(db: pymongo.MongoClient, company_id: int, username: str, password: str):
+def login(db: pymongo.MongoClient, username: str, password: str):
     pload = {
-        'companyId': company_id,
-        'username': username,
+        # 'username': username,
+        'email': username,
         'password': password
     }
+    # Brittany_Murillo@cycloneaviation.com
+    # murillobr
     employee_found: dict = db["Employees"].find_one(pload)
     if employee_found:
-        auth_token =  encode_auth_token(db, company_id, username)
-        return auth_token
+        print("employee is found", employee_found)
+        auth_token =  encode_auth_token(db, username)
+        print("Token: " + str(auth_token) + " isManager: " + str(employee_found["isManager"]))
+        load = {
+            'auth_token': auth_token,
+            'isManager': employee_found["isManager"]
+        }
+        return load
     else:
-        return -1
+        return {"error": "invalid login", "code": -1}
 
-def encode_auth_token(db: pymongo.MongoClient, company_id: int, username: str):
+def encode_auth_token(db: pymongo.MongoClient, username: str):
     """
     Generates the auth_token
     """
     try:
         payload = {
-            'exp': datetime.datetime.utcnow() + timedelta(days = 0, hours = 1, seconds = 0),
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(days = 0, hours = 1, seconds = 0),
             'iat': datetime.datetime.utcnow(),
-            'cid': company_id,
             'uid': username
         }
-        return jwt.encode(payload, app.config.get('SECRET_KEY'), algorithm='HS256')
+        # return jwt.encode(payload, app.config.get('SECRET_KEY'), algorithm='HS256')
+        return jwt.encode(payload, 'secret', algorithm='HS256').decode()
     except Exception as e:
         return e
 
@@ -80,11 +90,17 @@ def decode_auth_token(db: pymongo.MongoClient, auth_token):
     Decodes the auth token
     """
     try:
-        payload = jwt.decode(auth_token, app.config.get('SECRET_KEY'))
-        return payload['username']
+        # payload = jwt.decode(auth_token, app.config.get('SECRET_KEY'))
+        payload = jwt.decode(auth_token, 'secret')
+        return payload['uid']
     except jwt.ExpiredSignatureError:
         return 'Signature expired. Please log in again.'
     except jwt.InvalidTokenError:
         return 'Invalid token. Please log in again.'
+
+def hash_pw(password: str):
+    salt = bcrypt.gensalt()
+    hashed = bcrypt.hashpw(password, salt)
+    return hashed
 
 
