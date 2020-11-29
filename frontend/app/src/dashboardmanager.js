@@ -58,7 +58,7 @@ export class Dashboardmanager extends React.Component{
   addEmp: false,
   dropEmp: false,
   editEmp: false,
-  
+  viewDetail:false,
   
   firstName : '',
   lastName : '',
@@ -201,7 +201,9 @@ editSubmit() {
           });
         }
 
-
+        viewDetail(modal4Visible) {
+          this.setState({ modal4Visible });
+        }
 
 
         handleSearch = (emplID) => {
@@ -299,11 +301,9 @@ editSubmit() {
           return (
             <Layout style={{ minHeight: '100vh' }}>
 
-              <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
+              <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse} style={{background:'#0099ff'}} theme="light">
 
-                <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
-
-                  <Menu.Item key="2" onClick={this.view}  icon={<DesktopOutlined />}>View</Menu.Item>
+                <Menu  defaultSelectedKeys={['1']} mode="inline" style={{background:'#0099ff'}}>
 
 
 
@@ -316,6 +316,14 @@ editSubmit() {
                    visible={this.state.modal1Visible}
                    onOk={() => this.addEmp(false)}
                    onCancel={() => this.addEmp(false)}
+
+                   footer={[
+                   
+                    <Button key="back" onClick={() => this.addEmp(false)}>
+                      Return
+                    </Button>,
+                  
+                  ]}
                  >
                   
          
@@ -443,7 +451,15 @@ editSubmit() {
                         drop
                       </Menu.Item>
 
-                      <Modal title="Drop Employee" style={{ top: 20 }} visible={this.state.modal2Visible} onOk={() => this.dropEmp(false)} onCancel={() => this.dropEmp(false)}>
+                      <Modal title="Drop Employee" style={{ top: 20 }} visible={this.state.modal2Visible} onOk={() => this.dropEmp(false)} onCancel={() => this.dropEmp(false)}
+                        footer={[
+                   
+                          <Button key="back" onClick={() => this.dropEmp(false)}>
+                            Return
+                          </Button>,
+                        
+                        ]}
+                        >
                       <p>You selected this employee</p>
                      <hr></hr>
                   <Descriptions Item style={{ textAlign: 'left' }}>
@@ -473,6 +489,14 @@ editSubmit() {
                    visible={this.state.modal3Visible}
                    onOk={() => this.editEmp(false)}
                    onCancel={() => this.editEmp(false)}
+
+                   footer={[
+                   
+                    <Button key="back" onClick={() => this.editEmp(false)}>
+                      Return
+                    </Button>,
+                  
+                  ]}
                  >
 
               <Form {...layout} name="nest-messages" onFinish={this.editonFinish} >
@@ -599,7 +623,35 @@ editSubmit() {
                   </SubMenu>
 
                   
-                  <Menu.Item key="7" icon={<FundViewOutlined />}>Detail</Menu.Item>
+                  <Menu.Item key="6" onClick={()=>this.viewDetail(true)} icon={<FundViewOutlined/>}>Detail</Menu.Item>
+               
+               <Modal title="View Employee" style={{ top: 20 }} visible={this.state.modal4Visible} onOk={() => this.viewDetail(false)} onCancel={() => this.viewDetail(false)}
+
+footer={[
+            
+<Button key="back" onClick={() => this.viewDetail(false)}>
+OK
+</Button>,
+
+]}
+               >
+               <p>Employee detail:</p>
+              <hr></hr>
+           <Descriptions Item style={{ textAlign: 'left' }}>
+           <Descriptions.Item label="First Name" bordered>{this.state.firstName}</Descriptions.Item>
+           <Descriptions.Item label="Last Name">{this.state.lastName}</Descriptions.Item>
+           <Descriptions.Item label="Position">{this.state.positionTitle}</Descriptions.Item>
+           <Descriptions.Item label="Company">{this.state.companyName}</Descriptions.Item>
+           <Descriptions.Item label="Company ID">{this.state.companyId}</Descriptions.Item>
+           <Descriptions.Item label="Manager">{this.state.isManager.toString()}</Descriptions.Item>
+           <Descriptions.Item label="Employee ID">{this.state.employeeId}</Descriptions.Item>
+           <Descriptions.Item label="Manager ID">{this.state.man}</Descriptions.Item>
+           <Descriptions.Item label="Start Date">{this.state.startDate}</Descriptions.Item>
+           <Descriptions.Item label="Email">{this.state.email}</Descriptions.Item>
+                   </Descriptions>
+                   
+           
+               </Modal>
                               <hr></hr>
                     <Menu.Item key="1" icon={<LogoutOutlined />} >
                       <a href="./login" onClick={this.lgin}>logout</a>
@@ -645,22 +697,7 @@ editSubmit() {
 
                     <dir className ="test" >
                         <hr></hr>
-                      <Collapse defaultActiveKey={['1']} onChange={callback}>
-                      <Panel header="Detail Info" key="1" >
-                <Descriptions Item style={{ textAlign: 'left' }}>
-                  <Descriptions.Item label="First Name" bordered>{this.state.firstName}</Descriptions.Item>
-                  <Descriptions.Item label="Last Name">{this.state.lastName}</Descriptions.Item>
-                  <Descriptions.Item label="Position">{this.state.positionTitle}</Descriptions.Item>
-                  <Descriptions.Item label="Company">{this.state.companyName}</Descriptions.Item>
-                  <Descriptions.Item label="Company ID">{this.state.companyId}</Descriptions.Item>
-              
-                  <Descriptions.Item label="Employee ID">{this.state.employeeId}</Descriptions.Item>
-                  <Descriptions.Item label="Manager ID">{this.state.man}</Descriptions.Item>
-                  <Descriptions.Item label="Start Date">{this.state.startDate}</Descriptions.Item>
-                  <Descriptions.Item label="Email">{this.state.email}</Descriptions.Item>
-                          </Descriptions>
-                        </Panel>
-                      </Collapse>
+                      
                     </dir>
               </Layout>
             </Layout>
