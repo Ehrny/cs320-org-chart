@@ -62,10 +62,21 @@ def login(db: pymongo.MongoClient, username: str, password: str):
         print("employee is found", employee_found)
         auth_token =  encode_auth_token(db, username)
         print("Token: " + str(auth_token) + " isManager: " + str(employee_found["isManager"]))
-        load = {
-            'auth_token': auth_token,
-            'isManager': employee_found["isManager"]
-        }
+        load = json.dumps({
+            "code": 1,
+            "auth_token": auth_token,
+            "user":{
+                    "firstName" : employee_found["firstName"],
+                    "lastName" : employee_found["lastName"],
+                    "companyId" : employee_found["companyId"],
+                    "positionTitle" : employee_found["positionTitle"],
+                    "companyName" : employee_found["companyName"],
+                    "isManager" : employee_found["isManager"],
+                    "employeeId" : employee_found["employeeId"],
+                    "email" : username,
+                    "startDate" : employee_found["startDate"]
+            }
+        })
         return load
     else:
         return {"error": "invalid login", "code": -1}
@@ -102,5 +113,3 @@ def hash_pw(password: str):
     salt = bcrypt.gensalt()
     hashed = bcrypt.hashpw(password, salt)
     return hashed
-
-

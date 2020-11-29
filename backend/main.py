@@ -86,7 +86,6 @@ def route_search_all(company_id: str):
     query: str = request.args.get("q", "")
     return search.search_all(db, int(company_id), query)
 
-
 # Url: /company/<company_id>/search/<field>
 # Valid entries for <field>: firstName, lastName, positionTitle, email
 # Method: GET
@@ -117,12 +116,13 @@ def route_login():
     print("Username: ", username, "Password: ", password)
 
     retLoad = employees.login(db,username, password)
+    print("Returning: ", retLoad)
      # retVal.headers.add('Access-Control-Allow-Origin', '*')
     
     # print("this is the username: ",request.args)
     # retLoad = employees.login(username, password)
     # retVal = jsonify(retLoad)
-    return data
+    return retLoad
 
 
 if __name__ == "__main__":
