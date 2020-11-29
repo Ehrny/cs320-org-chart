@@ -46,7 +46,7 @@ export class Dashboard extends React.Component{
           highlightPostNumbers: [1],searchparam : 'First', addEmp: false,dropEmp: false, editEmp: false,firstName : '',lastName : '',
           companyId : user.companyId, password : '',
           positionTitle : '',companyName : '',
-          isManager : false,employeeId : 0, email : '',startDate : '',firstNameTemp: '',lastNameTemp: '',companyIdTemp: 0,
+          isManager : false,employeeId : user.employeeId, email : '',startDate : '',firstNameTemp: '',lastNameTemp: '',companyIdTemp: 0,
           passwordTemp: '',positionTitleTemp: '',companyNameTemp: '',isManagerTemp: false,
           employeeIdTemp: 0, emailTemp: '', startDateTemp: '',transEmp: false, searcherror:"",
           managerId: 0,autoFirst: [], autoLast: [],  autoOption: [],  autoEmpty: [],  managerList: [], employeeList: [], 
@@ -57,7 +57,7 @@ export class Dashboard extends React.Component{
     
         async componentDidMount(){
           console.log("User logged in to company: ", this.state.companyId)
-          let f = fetch('/company/'+this.state.companyId+'/employee/'+1+'?treeDepth='+this.state.defaultTreeDepth)
+          let f = fetch('/company/'+this.state.companyId+'/employee/'+this.state.employeeId+'?treeDepth='+this.state.defaultTreeDepth)
                   .then(response=>{console.log(response)
                                     return response.json()})
                   .then(json=>{console.log("passing data: ",json);console.log(initializeTree(json));return (initializeTree(json))})
