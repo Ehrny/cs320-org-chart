@@ -1,21 +1,21 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import logo from './imgs/logo.png';
-import Orgchart from '@unicef/react-org-chart'
 import 'antd/dist/antd.css';
 import Drop from "./drop";
 import './index.css';
 import './dashboard.css';
+import IconButton from '@material-ui/core/IconButton';
 import { Layout, Menu, Breadcrumb, Input, Select, Descriptions, Collapse, Modal, Button, Form, InputNumber ,DatePicker } from 'antd';
-import {
-    DesktopOutlined,
-    UserOutlined,
-    LogoutOutlined,
-    FundViewOutlined,
-    UploadOutlined
-  } from '@ant-design/icons';
-  import axios from 'axios';
+import {DesktopOutlined, BellOutlined, UserOutlined, LogoutOutlined, FundViewOutlined, ClockCirclieOutlined, UploadOutlined} from '@ant-design/icons';
+import { getChildren, getParent, handleFetchedTree, translate, initializeTree, getNode } from './treeparse';
+import {DisplayTree} from './displaytree';
+import { AutoComplete, notification, Badge} from 'antd';//string for Notification function locate above "export class Dashboardmanager extends React.Component {"
+import { getUser, removeUserSession } from './components/session';
 
+
+const url = "http://localhost:5000/"
+
+  const key = 'updatable';
 
   const { Panel } = Collapse;
   function callback(key) {
@@ -26,11 +26,6 @@ import {
   const { SubMenu } = Menu;
   const { Search } = Input;
   const { Option } = Select;
-  
-
-
-
-   
   const layout = {
     labelCol: {
       span: 8,
@@ -40,149 +35,145 @@ import {
     },
   };
 
-
 export class Dashboard extends React.Component{
- 
-
-
+  
   constructor(props) {
+    
     super(props);
+    let user = JSON.parse(getUser());
     this.state = {
-  
-  collapsed: false,
-  downloadingChart: false,
-  config: {},
-  highlightPostNumbers: [1],
-  searchparam : 'First',
+          tree:null,  didTreeChange:false, defaultTreeDepth: 3, getChartfromRoot: 1, collapsed: false,downloadingChart: false, config: {},
+          highlightPostNumbers: [1],searchparam : 'First', addEmp: false,dropEmp: false, editEmp: false,firstName : '',lastName : '',
+          companyId : user.companyId, password : '',
+          positionTitle : '',companyName : '',
+          isManager : false,employeeId : 0, email : '',startDate : '',firstNameTemp: '',lastNameTemp: '',companyIdTemp: 0,
+          passwordTemp: '',positionTitleTemp: '',companyNameTemp: '',isManagerTemp: false,
+          employeeIdTemp: 0, emailTemp: '', startDateTemp: '',transEmp: false, searcherror:"",
+          managerId: 0,autoFirst: [], autoLast: [],  autoOption: [],  autoEmpty: [],  managerList: [], employeeList: [], 
+          user: getUser(),
+          notifs:[]
+        };
+    } //end of constructor
+    
+        async componentDidMount(){
+          console.log("User logged in to company: ", this.state.companyId)
+          let f = fetch('/company/'+this.state.companyId+'/employee/'+1+'?treeDepth='+this.state.defaultTreeDepth)
+                  .then(response=>{console.log(response)
+                                    return response.json()})
+                  .then(json=>{console.log("passing data: ",json);console.log(initializeTree(json));return (initializeTree(json))})
+          f.then(data=>{this.setState({didTreeChange:true});this.setState({tree:data});})
 
-  addEmp: false,
-  dropEmp: false,
-  editEmp: false,
-  viewDetail:false,
-  
-  firstName : '',
-  lastName : '',
-  companyId : 0,
-  password : '',
-  positionTitle : '',
-  companyName : '',
-  isManager : false,
-  employeeId : 0,
-  email : '',
-  startDate : '',
+          const response = await fetch('/company/'+this.state.companyId+'/search/firstName?q=');
+          const json = await response.json();
+          //console.log(json.results)
+          this.setState(state => {
+            for (const [index] of json.results.entries()) {
+              this.state.autoFirst.push({ value: json.results[index].firstName })
+              this.state.autoLast.push({ value: json.results[index].lastName })
+              this.state.autoOption.push({ value: json.results[index].firstName })        
+              if (json.results[index].isManager == true)
+                this.state.managerList.push({ value: json.results[index].firstName + ' ' + json.results[index].lastName })
+              else
+                this.state.employeeList.push({ value: json.results[index].firstName + ' ' + json.results[index].lastName })
+            }
+          });
+          //console.log('this.state.managerList ')
+          //console.log(this.state.managerList)
+        }
 
-    firstNameTemp: '',
-      lastNameTemp: '',
-      companyIdTemp: 0,
-      passwordTemp: '',
-      positionTitleTemp: '',
-      companyNameTemp: '',
-      isManagerTemp: false,
-      employeeIdTemp: 0,
-      emailTemp: '',
-      startDateTemp: ''
-    };
-} 
+        checkIfTreeChanged(){
+          if(this.state.tree){
 
+          }
+          return this.state.didTreeChange
+        }
 
+        onManageChange = (value) => {
+          console.log(`selected ${value}`);  }
+        
+        onManageBlur() {
 
-viewDetail(modal5Visible) {
-  this.setState({ modal5Visible });
-}
+          console.log('blur');  }
+        
+        onManageFocus() {
+          console.log('focus');  }
+        
+        onManageSearch = (val) => {
+          console.log('search:', val);  }
+        
+        openNotification() {
+            console.log("this is notif")
+            notification.open({
+              key,
+              message: 'Notification Title',
+              description: 'description.',
+            });    setTimeout(() => {
+              notification.open({
+                key,
+                message: 'New Title',
+                description: 'New description.',
+              });
+            }, 1000);
+          };
+      
+         //print the Add Object
+        addonFinish = event => {
+          console.log(this.state);
+        };
 
-addSubmit() {
-  // Simple POST request with a JSON body using axios
-  console.log(this.state);
-  const addEmployee = { title: 'Add Employee' };
-  axios.post('http://161.35.55.104/api/addEmployee', addEmployee)
-    .then(response => this.setState({
-      firstName: response.firstNameTemp,
-      lastName: response.lastNameTemp,
-      companyId: response.companyIdTemp,
-      password: response.passwordTemp,
-      positionTitle: response.positionTitleTemp,
-      companyName: response.companyNameTemp,
-      isManager: response.isManagerTemp,
-      employeeId: response.employeeIdTemp,
-      email: response.emailTemp,
-      startDate: response.startDateTemp,
+         //put the input value into state
+        handleAdd = ({ target }) => {
+          this.setState({ [target.name]: target.value });
+        };
 
-    }));
-}
-dropSubmit() {
-  // Simple POST request with a JSON body using axios
-  const dropEmployee = { title: 'Drop Employee' };
-  axios.post('http://161.35.55.104/api/dropEmployee', dropEmployee)
-    .then(response => this.setState({
-      firstName: response.firstName,
-      lastName: response.lastName,
-      companyId: response.companyId,
-      password: response.password,
-      positionTitle: response.positionTitle,
-      companyName: response.companyName,
-      isManager: response.isManager,
-      employeeId: response.employeeId,
-      email: response.email,
-      startDate: response.startDate,
-    }));
-}
-editSubmit() {
-  // Simple POST request with a JSON body using axios
-  const editEmployee = { title: 'Edit Employee' };
-  axios.post('http://161.35.55.104/api/editEmployee', editEmployee)
-    .then(response => this.setState({
-      firstName: response.firstNameTemp,
-      lastName: response.lastNameTemp,
-      companyId: response.companyIdTemp,
-      password: response.passwordTemp,
-      positionTitle: response.positionTitleTemp,
-      companyName: response.companyNameTemp,
-      isManager: response.isManagerTemp,
-      employeeId: response.employeeIdTemp,
-      email: response.emailTemp,
-      startDate: response.startDateTemp,
+        editonFinish = event => {
+          console.log(this.state);
+        };
 
-    }));
-}
+        handleEdit = ({ target }) => {
+          this.setState({ [target.name]: target.value });
+        };
 
 
-
-   //print the Add Object
-   addonFinish = event => {
-    console.log(this.state);
-  };
-
-  //put the input value into state
-  handleAdd = ({ target }) => {
-    this.setState({ [target.name]: target.value });
-  };
-
-  editonFinish = event => {
-    console.log(this.state);
-  };
-
-  handleEdit = ({ target }) => {
-    this.setState({ [target.name]: target.value });
-  };
-
-
-    onFinish = onFinish => {
-     console.log(onFinish);
-    };
+        onFinish = onFinish => {
+          console.log(onFinish);
+        };
 
 
         onCollapse = collapsed => {
           console.log(collapsed);
           this.setState({ collapsed });
         };
-
-        handleChange = (searchparam) =>{
+        
+        handleDownload = () => {
+          this.setState({ downloadingChart: false })
+        }
+        handleSearchparamChange = (searchparam) =>{
           const sp = searchparam
           this.setState({searchparam: sp})
           console.log(`selected ${sp}`);
+          if (searchparam === 'First') {
+            this.setState({ autoOption: this.state.autoFirst })
+          } else if (searchparam === 'Last') {
+            this.setState({ autoOption: this.state.autoLast })
+          } else if (searchparam === 'EmplID') {
+            this.setState({ autoOption: this.state.autoEmpty })
+          }
         };
 
+        transEmp(modal5Visible) {
+          this.setState({ modal5Visible });
+        }
+
+        handleOnChangeConfig = config => {
+          this.setState({ config: config })
+        }
       
+        handleLoadConfig = () => {
+          const { config } = this.state
+          return config
+        }
+
         addEmp(modal1Visible) {
           this.setState({ modal1Visible });
         }
@@ -193,17 +184,9 @@ editSubmit() {
         editEmp(modal3Visible) {
           this.setState({ modal3Visible });
           this.setState({
-           
-            firstNameTemp: this.state.firstName,
-            lastNameTemp: this.state.lastName,
-           companyIdTemp: this.state.companyId,
-           passwordTemp: this.state.password,
-          positionTitleTemp: this.state.positionTitle,
-       companyNameTemp: this.state.companyName,
-       isManagerTemp: this.state.isManager,
-       employeeIdTemp:this.state.employeeId,
-       emailTemp: this.state.email,
-       startDateTemp: this.state.startDate,
+              firstNameTemp: this.state.firstName,lastNameTemp: this.state.lastName,companyIdTemp: this.state.companyId,
+              passwordTemp: this.state.password,positionTitleTemp: this.state.positionTitle,companyNameTemp: this.state.companyName,
+              isManagerTemp: this.state.isManager,employeeIdTemp:this.state.employeeId,emailTemp: this.state.email,startDateTemp: this.state.startDate,
           });
         }
 
@@ -214,127 +197,105 @@ editSubmit() {
 
 
         handleSearch = (emplID) => {
-          console.log('First seach pass, searching by: ', this.state.searchparam)
-          if(this.state.searchparam=='EmplID')
+          console.log('searching by: ', this.state.searchparam)
+          if(this.state.searchparam==='EmplID')
           {
             console.log('searching by: ', this.state.searchparam)
-            let resp = fetch('/company/3/employee/' + emplID)
+            let resp = fetch('/company/'+this.state.companyId+'/employee/' + emplID)
+          
             //let resp = fetch('/naivelogin/'+emplID)//company/3/employee/1')
-                            .then(response => {
-                              console.log(response);
-                              return response.json()})
+                            .then(response => {return response.json()})
                             .then(json =>
                               {
-                                console.log(json)
                                 this.setState({
-                                firstName : json.firstName,
-                                lastName : json.lastName,
-                                companyId : json.companyId,
-                                password : json.password,
-                                positionTitle : json.positionTitle,
-                                companyName : json.companyName,
-                                isManager : json.isManager,
-                                employeeId : json.employeeId,
-                                email : json.email,
-                                startDate : json.startDate})
+                                firstName : json.firstName,lastName : json.lastName,companyId : json.companyId,
+                                password : json.password,positionTitle : json.positionTitle,companyName : json.companyName,
+                                isManager : json.isManager,employeeId : json.employeeId,email : json.email,startDate : json.startDate})
                               })
-          }
-          if(this.state.searchparam=='First')
+            this.setState({tree:null})
+            let resp2 = fetch('/company/'+this.state.companyId+'/employee/'+emplID+'?treeDepth='+this.state.defaultTreeDepth)
+                        .then(response => {console.log("Response code in search:", response.status);  return response.json()})
+                        .then(json=>{this.setState({getChartfromRoot: json.employeeId,didTreeChange: true,tree:handleFetchedTree(json)});})
+              }
+
+
+          if(this.state.searchparam==='First')
           {
-
+            this.setState({tree:null})
             console.log('searching by: ', this.state.searchparam)
-            let resp = fetch('/company/1/search/firstName?q=' + emplID)
+            let resp = fetch('/company/'+this.state.companyId+'/search/firstName?q=' + emplID)
             //let resp = fetch('/naivelogin/'+emplID)//company/3/employee/1')
-                            .then(response => {
-                              console.log(response);
-                              return response.json()})
+                            .then(response => { return response.json()})
                             .then(json =>
-                              {
-                                console.log(json)
-                                this.setState({
-                                firstName : json.results[0].firstName,
-                                lastName : json.results[0].lastName,
-                                companyId : json.results[0].companyId,
-                                password : json.results[0].password,
-                                positionTitle : json.results[0].positionTitle,
-                                companyName : json.results[0].companyName,
-                                isManager : json.results[0].isManager,
-                                employeeId : json.results[0].employeeId,
-                                email : json.results[0].email,
-                                startDate : json.results[0].startDate})
-                              })
-
+                                    {
+                                      this.setState({firstName : json.results[0].firstName,lastName : json.results[0].lastName,companyId : json.results[0].companyId,
+                                      password : json.results[0].password,positionTitle : json.results[0].positionTitle,companyName : json.results[0].companyName,
+                                      isManager : json.results[0].isManager, employeeId : json.results[0].employeeId, email : json.results[0].email, startDate : json.results[0].startDate})
+                                      fetch('/company/'+this.state.companyId+'/employee/'+json.results[0].employeeId+'?treeDepth='+this.state.defaultTreeDepth).then(response2=>response2.json()).then(json2=>{this.setState({tree:handleFetchedTree(json2)})})
+                                    }
+                                    
+                                  );
           }
 
-          if(this.state.searchparam=='Last')
+          if(this.state.searchparam==='Last')
           {
             console.log("Searching by lastname")
-
+              let holdstate = this.state.tree;
+              this.setState({tree:null})
               console.log('searching by: ', this.state.searchparam)
-              let resp = fetch('/company/1/search/lastName?q=' + emplID)
-              //let resp = fetch('/naivelogin/'+emplID)//company/3/employee/1')
-                              .then(response => {
-                                console.log(response);
-                                return response.json()})
-                              .then(json =>
-                                {
-                                  console.log(json)
-                                  this.setState({
-                                  firstName : json.results[0].firstName,
-                                  lastName : json.results[0].lastName,
-                                  companyId : json.results[0].companyId,
-                                  password : json.results[0].password,
-                                  positionTitle : json.results[0].positionTitle,
-                                  companyName : json.results[0].companyName,
-                                  isManager : json.results[0].isManager,
-                                  employeeId : json.results[0].employeeId,
-                                  email : json.results[0].email,
-                                  startDate : json.results[0].startDate})
-                                })
-  
-
-
-          }
+              let resp = 
+                fetch('/company/'+this.state.companyId+'/search/lastName?q=' + emplID)
+                .then(response => {console.log("response", response);return response.json()})
+                .then(json =>
+                  {
+                    this.setState({ firstName : json.results[0].firstName,lastName : json.results[0].lastName,companyId : json.results[0].companyId,
+                    password : json.results[0].password, positionTitle : json.results[0].positionTitle,companyName : json.results[0].companyName,isManager : json.results[0].isManager,
+                    employeeId : json.results[0].employeeId,email : json.results[0].email, startDate : json.results[0].startDate})
+                    fetch('/company/'+this.state.companyId+'/employee/'+json.results[0].employeeId+'?treeDepth='+this.state.defaultTreeDepth).then(response2=>response2.json()).then(json2=>{this.setState({tree:handleFetchedTree(json2)})})
+                  })
+                }
         }                   
 
+        depthChange = (value) =>{
+          if(!Number.isInteger(value)){
+            console.log("not an integer")
+            return;
+          }
+          console.log("depthchange: ", value)
+          let temp = this.state.tree;
+          this.setState({tree:null})
+          this.setState({defaultTreeDepth: value})    
+          console.log("ID", temp.id)
+          let resp = fetch('/company/'+this.state.companyId+'/employee/' + temp.id+'?treeDepth='+value)
+            //let resp = fetch('/naivelogin/'+emplID)//company/3/employee/1')
+                            .then(response => {return response.json()})
+                            .then(json =>{this.setState({tree:handleFetchedTree(json)})})
+        }
+
+
+        handleLogout = () => {
+          removeUserSession();
+          this.props.history.push('/login');
+        }
 
         render() {
-          const { tree, downloadingChart } = this.state
-          //For downloading org chart as image or pdf based on id
-          const downloadImageId = 'download-image'
-          const downloadPdfId = 'download-pdf'
-
+          //console.log("Tree state at render:", this.state.tree)
+          if(this.state.tree===null)
+            return (<p1 className="loading">Loading...</p1>);
+          else
           return (
             <Layout style={{ minHeight: '100vh' }}>
 
-              <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
+              <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse} theme="dark">
 
                 <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
 
-
+                  <Menu.Item key="2" onClick={this.view}  icon={<DesktopOutlined />}>View</Menu.Item>
                   <SubMenu key="sub1" icon={<UserOutlined />} title="Manage">
                   <Menu.Item key="3"onClick={()=>this.addEmp(true)}> add </Menu.Item> 
                    
-                   <Modal
-                   title="Add Employee"
-                   style={{ top: 20 }}
-                   visible={this.state.modal1Visible}
-                   onOk={() => this.addEmp(false)}
-                   onCancel={() => this.addEmp(false)}
-
-
-                   footer={[
-                   
-                    <Button key="back" onClick={() => this.addEmp(false)}>
-                      Return
-                    </Button>,
-                  
-                  ]}
-                 >
-                  
-         
-         
-                  <Form {...layout} name="nest-messages" onFinish={this.state.onFinish} onFinish={this.onFinish} >
+                   <Modal title="Add Employee" style={{ top: 20 }} visible={this.state.modal1Visible} onOk={() => this.addEmp(false)} onCancel={() => this.addEmp(false)}>
+                  <Form {...layout} name="nest-messages" onFinish={this.onFinish} >
                <Form.Item
                  name={['user', 'firstName']}
                  label="First Name"
@@ -413,16 +374,7 @@ editSubmit() {
                         drop
                       </Menu.Item>
 
-                      <Modal title="Drop Employee" style={{ top: 20 }} visible={this.state.modal2Visible} onOk={() => this.dropEmp(false)} onCancel={() => this.dropEmp(false)}
-                      
-                      footer={[
-                       
-                        <Button key="back" onClick={() =>this.dropEmp(false)}>
-                          Return
-                        </Button>,
-                      
-                      ]}
-                      >
+                      <Modal title="Drop Employee" style={{ top: 20 }} visible={this.state.modal2Visible} onOk={() => this.dropEmp(false)} onCancel={() => this.dropEmp(false)}>
                       <p>You selected this employee</p>
                      <hr></hr>
                   <Descriptions Item style={{ textAlign: 'left' }}>
@@ -437,11 +389,10 @@ editSubmit() {
                   <Descriptions.Item label="Start Date">{this.state.startDate}</Descriptions.Item>
                   <Descriptions.Item label="Email">{this.state.email}</Descriptions.Item>
                           </Descriptions>
-                          
-                          <Button type="primary" htmlType="submit" onClick={()=>this.dropSubmit()}>
+
+                          <Button type="primary" htmlType="submit">
                                       Submit
                                     </Button>
-                  
                       </Modal>
 
 
@@ -453,15 +404,6 @@ editSubmit() {
                    visible={this.state.modal3Visible}
                    onOk={() => this.editEmp(false)}
                    onCancel={() => this.editEmp(false)}
-                   
-                   footer={[
-                   
-                    <Button key="back" onClick={() => this.editEmp(false)}>
-                      Return
-                    </Button>,
-                  
-                  ]}
-
                  >
 
               <Form {...layout} name="nest-messages" onFinish={this.editonFinish} >
@@ -582,8 +524,6 @@ editSubmit() {
                                   </Form.Item>
                                   
                                   </Form>
-                           
-
                       </Modal>
                   </SubMenu>
 
@@ -596,38 +536,66 @@ editSubmit() {
                     </div>
                   </Modal>
                   
-                  <Menu.Item onClick={()=>this.viewDetail(true)} icon={<FundViewOutlined/>}>Detail</Menu.Item>
-               
-               <Modal title="View Employee" style={{ top: 20 }} visible={this.state.modal5Visible} onOk={() => this.viewDetail(false)} onCancel={() => this.viewDetail(false)}
-
-footer={[
-            
-<Button key="back" onClick={() => this.viewDetail(false)}>
-OK
-</Button>,
-
-]}
-               >
-               <p>Employee detail:</p>
+                  <Menu.Item key="7" icon={<FundViewOutlined />}>Detail</Menu.Item>
+                  <Menu.Item key="8" icon={<FundViewOutlined />} onClick={() => this.transEmp(true)}>Transfer</Menu.Item>
+            <Modal
+              title="Transfer Employee"
+              style={{ top: 20 }}
+              visible={this.state.modal5Visible}
+              onCancel={() => this.transEmp(false)}>
               <hr></hr>
-           <Descriptions Item style={{ textAlign: 'left' }}>
-           <Descriptions.Item label="First Name" bordered>{this.state.firstName}</Descriptions.Item>
-           <Descriptions.Item label="Last Name">{this.state.lastName}</Descriptions.Item>
-           <Descriptions.Item label="Position">{this.state.positionTitle}</Descriptions.Item>
-           <Descriptions.Item label="Company">{this.state.companyName}</Descriptions.Item>
-           <Descriptions.Item label="Company ID">{this.state.companyId}</Descriptions.Item>
-           <Descriptions.Item label="Manager">{this.state.isManager.toString()}</Descriptions.Item>
-           <Descriptions.Item label="Employee ID">{this.state.employeeId}</Descriptions.Item>
-           <Descriptions.Item label="Manager ID">{this.state.man}</Descriptions.Item>
-           <Descriptions.Item label="Start Date">{this.state.startDate}</Descriptions.Item>
-           <Descriptions.Item label="Email">{this.state.email}</Descriptions.Item>
-                   </Descriptions>
-                   
-           
-               </Modal>
+              <Select
+                showSearch
+                style={{ width: 200 }}
+                placeholder="From Manager"
+                optionFilterProp="children"
+                onChange={value => this.onManageChange(value)}
+                onFocus={this.onManageFocus()}
+                onBlur={this.onManageBlur()}
+                options={this.state.managerList}
+                onSearch={value => this.onManageSearch(value)}
+                filterOption={(inputValue, option) =>
+                  option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                }
+              >
+              </Select>
+              <span>{'                       '}</span>
+              <Select
+                showSearch
+                style={{ width: 200 }}
+                placeholder="To Manager"
+                optionFilterProp="children"
+                onChange={value => this.onManageChange(value)}
+                onFocus={this.onManageFocus()}
+                onBlur={this.onManageBlur()}
+                options={this.state.managerList}
+                onSearch={value => this.onManageSearch(value)}
+                filterOption={(inputValue, option) =>
+                  option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                }
+              ></Select>              <br />              <br />
+              <Select
+                showSearch
+                style={{ width: 200 }}
+                placeholder="Employee"
+                optionFilterProp="children"
+                onChange={value => this.onManageChange(value)}
+                onFocus={this.onManageFocus()}
+                onBlur={this.onManageBlur()}
+                options={this.state.employeeList}
+                onSearch={value => this.onManageSearch(value)}
+                filterOption={(inputValue, option) =>
+                  option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                }
+              ></Select>
+              <br />              <br />
+              <Button type="primary" htmlType="submit">
+                Submit
+              </Button>
+            </Modal>
                               <hr></hr>
                     <Menu.Item key="1" icon={<LogoutOutlined />} >
-                      <a href="./login" onClick={this.lgin}>logout</a>
+                      <a href="./login" onClick={this.handleLogout}>logout</a>
                     </Menu.Item>
                 </Menu>
               </Sider>
@@ -638,15 +606,33 @@ OK
                     <div>          
 
                     <img src={logo} className='img' alt="logo" />
+                    <Select className="selectColumn" defaultValue="First" onChange={this.handleSearchparamChange} size="small">
+                      <Option value="First" >First Name</Option>
+                      <Option value="Last">Last Name</Option>
+                      <Option value="EmplID"> Employee ID</Option>
+                    </Select>
+                    <AutoComplete
+                        className="autoSearch2"
+                        dropdownClassName="certain-category-search-dropdown"
+                        options={this.state.autoOption}
+                        filterOption={(inputValue, option) =>
+                          option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                        }
+                      >
 
-                      <Select className="selectColumn" defaultValue="First" onChange={this.handleChange} size="large">
-                        <Option value="First" >First Name</Option>
-                        <Option value="Last">Last Name</Option>
-                        <Option value= "EmplID"> Employee ID</Option>
-                        </Select>
-        
-                        <Search className="search-bar" placeholder="input search text" enterButton="Search" size="large"
-                                      onSearch={value=>this.handleSearch(value)} /> 
+                        <Search
+                          className="autoSearch"
+                          placeholder="input search text"
+                          enterButton="Search"
+                          size="small"
+                          onSearch={value => this.handleSearch(value)}
+                        />
+                      </AutoComplete>    
+                      
+                      <Badge count={5} className="badge" size="small" />          
+                      <BellOutlined className="noti" type="primary" onClick={() => this.openNotification()}>
+                        Notification
+                      </BellOutlined>
                         <h1>
                           {this.state.firstName} {this.state.lastName}
                         </h1>
@@ -654,15 +640,24 @@ OK
 
                   </Header>
 
+
+
+
                   <Content style={{ margin: '0 16px' }}>
                     <Breadcrumb style={{ margin: '16px 0' }}>
-                    <Breadcrumb.Item>Matches found: </Breadcrumb.Item>
                     
                     </Breadcrumb>
-                    <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
+                    
+                    <DisplayTree treeR={this.state.tree}/>
 
-                    </div>
                   </Content>
+
+                  <div className="numpicker">
+                        Depth 
+                  <InputNumber  min={1} max={50} defaultValue={this.state.defaultTreeDepth} 
+                    onChange={this.depthChange} />
+                  </div>
+
                     <Footer style={{ textAlign: 'center' }}>
                       CS320 Team 4 Runtime Terror
                     </Footer>
@@ -670,11 +665,25 @@ OK
 
                     <dir className ="test" >
                         <hr></hr>
-                  
+                      <Collapse defaultActiveKey={['1']} onChange={callback}>
+                      <Panel header="Detail Info" key="1" >
+                          <Descriptions Item style={{ textAlign: 'left' }}>
+                          <Descriptions.Item label="First Name" bordered>{this.state.firstName}</Descriptions.Item>
+                          <Descriptions.Item label="Last Name">{this.state.lastName}</Descriptions.Item>
+                          <Descriptions.Item label="Position">{this.state.positionTitle}</Descriptions.Item>
+                          <Descriptions.Item label="Company">{this.state.companyName}</Descriptions.Item>
+                          <Descriptions.Item label="Company ID">{this.state.companyId}</Descriptions.Item>
+                          <Descriptions.Item label="Manager">{this.state.isManager.toString()}</Descriptions.Item>
+                          <Descriptions.Item label="Employee ID">{this.state.employeeId}</Descriptions.Item>
+                          <Descriptions.Item label="Manager ID">{this.state.man}</Descriptions.Item>
+                          <Descriptions.Item label="Start Date">{this.state.startDate}</Descriptions.Item>
+                          <Descriptions.Item label="Email">{this.state.email}</Descriptions.Item>
+                          </Descriptions>
+                      </Panel>
+                      </Collapse>
                     </dir>
               </Layout>
             </Layout>
           );
         }
       }
-      

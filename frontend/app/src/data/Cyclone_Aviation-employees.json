@@ -8,7 +8,8 @@
   "isManager" : true,
   "employeeId" : 1,
   "email" : "Miquel_Pineda@cycloneaviation.com",
-  "startDate" : "2016-05-04"
+  "startDate" : "2016-05-04",
+  "actions": {"from":"", "to": ""}
 }, {
   "firstName" : "Reba",
   "lastName" : "Strickland",
