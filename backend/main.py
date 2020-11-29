@@ -106,20 +106,50 @@ def route_search_field(company_id: str, field: str):
 # URL Parameters: q: string, the query with which to perform text search on the given field.
 # Returns: 1 or -1 depending on if it passes correctly into the db[requests]
 #create a new request for transfer employee
+ce
 @app.route('/import/company/<company_id>/create_request', methods = ['POST'])
 def route_create_new_request(company_id: str):
     if (request.get_json() != None):
         request_dict = request.get_json()
         if (company_id == request_dict.get(company_id)):
-            return request_dict.create_request(db, request_dict)
+            return requests.create_request(db, request_dict)
     return -1
 
+# Url: /import/company/<company_id>/get_requests
+# Method: GET
+# Body: None
+# Headers: default
+# URL Parameters: company_id, employee_id
+# Returns: an array of request objs
 @app.route('/company/<company_id>/employee/<employee_id>/get_requests/')
 def route_get_requests(company_id: str, employee_id):
 
     if (company_id == request_dict.get(company_id)):
-        return request_dict.get_requests(db, employee_id)
+        return requests.get_requests(db, employee_id, company_id)
     return -1
+
+
+
+
+# Url: '/company/<company_id>/manager/<to_manager>/frommanager/<to_manager/employee/<employee_id>/approval_id/<approval_id>/denied'
+# Method: GET
+# Body: None
+# Headers: default
+# URL Parameters: comapny_id:str,to_manager: str, from_manager: str, employee_moved: str, approval_id: str
+# Returns: 1 or -1 depending on success
+@app.route('/company/<company_id>/manager/<to_manager>/frommanager/<to_manager/employee/<employee_id>/approval_id/<approval_id>/denied')
+def route_deny_request(comapny_id:str,to_manager: str, from_manager: str, employee_moved: str, approval_id: str):
+    return requests.deny_request(db, company_id, to_manager, from_manager, employee_moved, approval_id)
+
+# Url: '/company/<company_id>/manager/<to_manager>/frommanager/<to_manager/employee/<employee_id>/approval_id/<approval_id>/approved'
+# Method: GET
+# Body: None
+# Headers: default
+# URL Parameters: comapny_id:str,to_manager: str, from_manager: str, employee_moved: str, approval_id: str
+# Returns: 1 or -1 depending on success
+@app.route('/company/<company_id>/manager/<to_manager>/frommanager/<to_manager/employee/<employee_id>/approval_id/<approval_id>/approved')
+def route_approve_request(comapny_id:str,to_manager: str, from_manager: str, employee_moved: str, approval_id: str):
+    return requests.approve_request(db, company_id, to_manager, from_manager, employee_moved, approval_id)
 
 # @app.route('/company/<company_id>/login', methods=['POST'])
 # def route_login(company_id: str):
