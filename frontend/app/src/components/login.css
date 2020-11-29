@@ -1,5 +1,5 @@
 .loginpage {
-    background-color: #031b03;
+    background: radial-gradient(#076b25, #000000);;
     min-height: 100vh;
     display: flex;
     flex-direction: column;

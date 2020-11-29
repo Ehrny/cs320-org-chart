@@ -629,7 +629,7 @@ export class Dashboard extends React.Component{
                         />
                       </AutoComplete>    
                       
-                      <Badge count={5} className="badge" size="small" />          
+                      <Badge count={5} className="badge" size="small" />    
                       <BellOutlined className="noti" type="primary" onClick={() => this.openNotification()}>
                         Notification
                       </BellOutlined>
