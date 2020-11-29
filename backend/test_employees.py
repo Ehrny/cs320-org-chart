@@ -130,19 +130,15 @@ def test_add_edit_drop(db: pymongo.MongoClient):
     #     "actions": {}}
 
     #Add
-    assert (employees.add_employee_to_db(db, CEO).acknowledged == True)
-    assert (employees.add_employee_to_db(db, employee1).acknowledged == True)
-    assert (employees.add_employee_to_db(db, employee2).acknowledged == True)
+    assert (employees.add_employee_to_db(db, CEO) == "success")
+    assert (employees.add_employee_to_db(db, employee1) == "success")
+    assert (employees.add_employee_to_db(db, employee2) == "success")
 
     #Edit
-    edit = employees.edit_employee(db, employee2.get("employeeId"), employee2_modified)
-    assert (edit.acknowledged == True)
-    assert (edit.modified_count == 1)
+    assert (employees.edit_employee(db, employee2.get("employeeId"), employee2_modified) == "success")
     
     #Delete
-    delete = employees.drop_employee_from_db(db, employee1)
-    assert (delete.acknowledged == True)
-    assert (delete.deleted_count == 1)
+    assert (employees.drop_employee_from_db(db, employee1) == "success")
 
 
 def test_dropping_to_change_manager(db: pymongo.MongoClient):

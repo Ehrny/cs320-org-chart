@@ -93,7 +93,7 @@ def route_add_employee_to_db(company_id: str):
     return json.dumps({ "error": "no json body probably" })
 
 #create an app.route for DROP
-@app.route('/import/company/<company_id>/drop_from_db/', methods = ['POST'])
+@app.route('/import/company/<company_id>/drop_from_db', methods = ['POST'])
 def route_drop_employee_from_db(company_id : str):
     if (request.get_json() != None):
         employee_dict = request.get_json()
@@ -103,11 +103,11 @@ def route_drop_employee_from_db(company_id : str):
 
 #create an app.route for EDIT
 @app.route('/import/company/<company_id>/employee/<employee_id>', methods = ['POST'])
-def route_edit_employee(company_id : str, current_employee_id: str):
+def route_edit_employee(company_id : str, employee_id: str):
     if (request.get_json() != None):
         updated_employee = request.get_json()
-        if (company_id == updated_employee.get(company_id)):
-            return employees.edit_employee(db, current_employee_id, updated_employee)
+        if (int(company_id) == updated_employee.get("companyId")):
+            return employees.edit_employee(db, int(company_id), int(employee_id), updated_employee)
     return json.dumps({ "error": "unknown" })
 
 

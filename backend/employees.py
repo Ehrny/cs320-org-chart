@@ -98,7 +98,8 @@ def decode_auth_token(db: pymongo.MongoClient, auth_token):
         return 'Invalid token. Please log in again.'
 
 def add_employee_to_db(db: pymongo.MongoClient, employee_dict: dict):
-    return db["Employees"].insert_one(employee_dict)
+    db["Employees"].insert_one(employee_dict)
+    return "success"
 
 def drop_employee_from_db(db: pymongo.MongoClient, dropped_employee: dict):
     #get all employees under current and set their manager to new manager
@@ -114,10 +115,12 @@ def drop_employee_from_db(db: pymongo.MongoClient, dropped_employee: dict):
     for employee in employees_under:
         db["Employees"].update(employee,
             {'$set': {"managerId" : dropped_employee.get("managerId")}})
-    return employee_check
+    return "success"
 
 
-def edit_employee(db: pymongo.MongoClient, employee_Id: str, updated: dict):
-    return db["Employees"].replace_one(db["Employees"].find_one({"employeeId": employee_Id}), updated) #return_document=pymongo.ReturnDocument.AFTER)
+def edit_employee(db: pymongo.MongoClient, company_Id: int, employee_Id: int, updated: dict):
+    employee = db["Employees"].find_one({"employeeId": employee_Id, "companyId": company_Id})
+    db["Employees"].update(employee, updated)
+    return "success"
 
 
