@@ -99,36 +99,6 @@ def test_add_edit_drop(db: pymongo.MongoClient):
         "startDate" : "2010-09-22"
     }
 
-    
-    # test_employee = {
-    #     "firstName": "Please",
-    #     "lastName": "Work",
-    #     "companyName": "Tiger_Microsystems-emplyees.json",
-    #     "positionTitle": "Data tester",
-    #     "isManager": False,
-    #     "email": "test@gmail.com",
-    #     "employeeId": "0",
-    #     "companyId": "1",
-    #     "startDate": "sometime",
-    #     "manager": "0",
-    #     "managerId": 1,
-    #     "employees": {},
-    #     "actions": {}}
-    # test_employee_updated = {
-    #     "firstName": "Edit",
-    #     "lastName": "Works",
-    #     "companyName": "Tiger_Microsystems-emplyees.json",
-    #     "positionTitle": "Data tester",
-    #     "isManager": False,
-    #     "email": "test@gmail.com",
-    #     "employeeId": "0",
-    #     "companyId": "1",
-    #     "startDate": "sometime",
-    #     "manager": "0",
-    #     "managerId": 1,
-    #     "employees": {},
-    #     "actions": {}}
-
     #Add
     assert (employees.add_employee_to_db(db, CEO) == "success")
     assert (employees.add_employee_to_db(db, employee1) == "success")
@@ -170,5 +140,5 @@ def test_dropping_to_change_manager(db: pymongo.MongoClient):
         "managerId": 0,
         "employees": {},
         "actions": {}}
-    assert(employees.add_employee_to_db(db, test_employee).acknowledged == True)
-    assert (employees.add_employee_to_db(db, test_employee_two).acknowledged == True)
+    assert (employees.add_employee_to_db(db, test_employee)  == "success")
+    assert (employees.add_employee_to_db(db, test_employee_two) == "success")
