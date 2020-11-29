@@ -17,3 +17,13 @@
 * If you are in a unix, run "./run.sh". If you're on windows, run "run.bat". If that doesn't work either fix it or let slack know, it's untested.
 * The app should launch on **localhost:5000**
 
+
+
+## Setting up frontend
+
+* In the app directory in frontend, add a file ".env" and add the line "SKIP_PREFLIGHT_CHECK=true"
+* "yarn install" in the cs320-org-chart directory, and in the frontend dir, and in the app directory
+* In the app dir do: "yarn add @unicef/react-org-chart" and then in this same directory run "yarn start"
+* without quotes
+
+
