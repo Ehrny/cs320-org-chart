@@ -28,7 +28,7 @@ def validate_request(request_dict: dict):
     doc = db["Requests"].find_one({"to_manager": request_dict["to_manager"],
     "from_manager": request_dict["from_manager"],
     "employee_id_moved": request_dict["employee_id"]})
-    if (not(doc)):
+    if (doc):
         if (request_dict.has_key("type") and request_dict.has_key("company_id") and
             request_dict.has_key("to_manager") and request_dict.has_key("from_manager") and
             request_dict.has_key("approvals")):
@@ -47,12 +47,21 @@ def approve_request(db: pymongo.MongoClient, company_id: str, to_manager: str, f
     allApproved = True
     for approval in doc[approvals]:
         if approval == False:
-            allAproved = False
-    if (allAproved):
+            allApproved = False
+    if (allApproved):
+        #moving the employee and fixing the employees under
         doc = db["Employees"].update_one({"employee_id": employee_moved,  "company_id" : request_dict[company_id], "manager_id": from_manager},
                                          {'$Set': {"manager_id" : to_manager}})
 
+        employees_under = db["Employees"].find(
+            {"managerId": employee_moved, "companyId": company_id}
+        )
+        # loop through current managers workers and call the edit their manager
+        for employee in employees_under:
+            db["Employees"].update(employee, {'$set': {"managerId": from_manager}})
+
         db["Requests"].delete_many({ "company_id" : request_dict[company_id], "employee_id_moved": request_dict["employee_id"]})
+
         if (doc):
             return 1
     else:
@@ -66,7 +75,7 @@ def deny_request(db: pymongo.MongoClient, company_id: str, to_manager: str, from
     doc = db["Requests"].delete_one({"to_manager": request_dict["to_manager"], "company_id" : request_dict[company_id],
                            "from_manager": request_dict["from_manager"],
                            "employee_id_moved": request_dict["employee_id"]})
-    if (doc)
+    if (doc):
         return 1
     return -1
 

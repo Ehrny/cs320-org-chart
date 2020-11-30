@@ -106,7 +106,7 @@ def route_search_field(company_id: str, field: str):
 # URL Parameters: q: string, the query with which to perform text search on the given field.
 # Returns: 1 or -1 depending on if it passes correctly into the db[requests]
 #create a new request for transfer employee
-ce
+
 @app.route('/import/company/<company_id>/create_request', methods = ['POST'])
 def route_create_new_request(company_id: str):
     if (request.get_json() != None):
