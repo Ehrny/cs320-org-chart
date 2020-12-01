@@ -155,3 +155,23 @@ def test_approve_one(database_init):
 
 
 #still need a test for approving final approval needed
+
+def test_approved_move(database_init):
+    #need to get the test employees
+    request1_add = {
+        "type": "move",
+        "company_id": 1,
+        "moved_employee": 3,
+        "to_manager": 2,
+        "from_manager": 1,
+
+        "approvals": {
+            2: False,
+
+        }
+    }
+    requests.create_request(db, request1_add)
+    requests.approve_request(db, 1, 2, 1, 3, 2)
+    list = requests.get_requests(db, 2, 1)
+    #need to create employees in employee file to move people around to
+    assert(True)
