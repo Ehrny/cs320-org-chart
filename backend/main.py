@@ -42,7 +42,7 @@ def route_employee_by_id(company_id: str, employee_id: str):
 # Returns: Employee object that is the manager of the employee with the given company and employee id, 
 #          with a field employees which contains the next level in the tree.
 #          The object is populated to treeDepth employees deep.
-# Example: /company/1/employee/2?treeDepth=3/manager
+# Example: /company/1/employee/2/manager?treeDepth=3
 #          returns the CEO of company 1 (who is the manager of employee 2) and the three levels below them. (4 levels of employees overall.)
 @app.route('/company/<company_id>/employee/<employee_id>/manager')
 def route_employee_manager_by_id(company_id: str, employee_id: str):

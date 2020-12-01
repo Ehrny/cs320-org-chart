@@ -11,6 +11,7 @@ import { getChildren, getParent, handleFetchedTree, translate, initializeTree, g
 import {DisplayTree} from './displaytree';
 import { AutoComplete, notification, Badge} from 'antd';//string for Notification function locate above "export class Dashboardmanager extends React.Component {"
 import { getUser, removeUserSession } from './components/session';
+import axios from 'axios';
 
 
 const url = "http://localhost:5000/"
@@ -58,9 +59,8 @@ export class Dashboard extends React.Component{
         async componentDidMount(){
           console.log("User logged in to company: ", this.state.companyId)
           let f = fetch('/company/'+this.state.companyId+'/employee/'+this.state.employeeId+'?treeDepth='+this.state.defaultTreeDepth)
-                  .then(response=>{console.log(response)
-                                    return response.json()})
-                  .then(json=>{console.log("passing data: ",json);console.log(initializeTree(json));return (initializeTree(json))})
+                  .then(response=>{return response.json()})
+                  .then(json=>{console.log(initializeTree(json));return (initializeTree(json))})
           f.then(data=>{this.setState({didTreeChange:true});this.setState({tree:data});})
 
           const response = await fetch('/company/'+this.state.companyId+'/search/firstName?q=');
@@ -77,6 +77,11 @@ export class Dashboard extends React.Component{
                 this.state.employeeList.push({ value: json.results[index].firstName + ' ' + json.results[index].lastName })
             }
           });
+
+          
+          axios.get(url+"company/"+this.state.companyId+"/employee/"+this.state.employeeId+"/manager"+"?treeDepth="+this.state.defaultTreeDepth)
+          .then(response=>{return response})
+          .catch(error=>{console.log("error: ",error)})
           //console.log('this.state.managerList ')
           //console.log(this.state.managerList)
         }
@@ -214,7 +219,7 @@ export class Dashboard extends React.Component{
                               })
             this.setState({tree:null})
             let resp2 = fetch('/company/'+this.state.companyId+'/employee/'+emplID+'?treeDepth='+this.state.defaultTreeDepth)
-                        .then(response => {console.log("Response code in search:", response.status);  return response.json()})
+                        .then(response => {  return response.json()})
                         .then(json=>{this.setState({getChartfromRoot: json.employeeId,didTreeChange: true,tree:handleFetchedTree(json)});})
               }
 
@@ -245,7 +250,7 @@ export class Dashboard extends React.Component{
               console.log('searching by: ', this.state.searchparam)
               let resp = 
                 fetch('/company/'+this.state.companyId+'/search/lastName?q=' + emplID)
-                .then(response => {console.log("response", response);return response.json()})
+                .then(response => {return response.json()})
                 .then(json =>
                   {
                     this.setState({ firstName : json.results[0].firstName,lastName : json.results[0].lastName,companyId : json.results[0].companyId,

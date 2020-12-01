@@ -47,7 +47,14 @@ def employee_by_id(db: pymongo.MongoClient, company_id: int , employee_id: int, 
     return employee_tree(db, employee_doc, tree_depth)
 
 def employee_manager_by_id(db: pymongo.MongoClient, company_id: int, employee_id: int, levels: int, tree_depth: int):
-    pass # TODO
+    employee_doc: dict = db["Employees"].find_one(
+        {"employeeId": employee_id, "companyId": company_id}
+    )
+    managerID = employee_doc.get("managerId")
+    employee_doc_2: dict = db["Employees"].find_one(
+        {"employeeId": managerID, "companyId": company_id}
+    )
+    return employee_tree(db, employee_doc_2, tree_depth)
 
 def login(db: pymongo.MongoClient, username: str, password: str):
     pload = {

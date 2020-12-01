@@ -4,7 +4,7 @@ import avatarPersonnel from './assets/avatar-personnel.svg'
 import { map } from 'd3';
 import axios from 'axios';
 
-
+const url = 'http://localhost:5000/'
 const TreeArr = [];   //Split the nested tree into array of subtrees for rendering
 const splitTrees = [];
 
@@ -40,13 +40,11 @@ export const getChildren = (rootId, depth) =>{ //rootId parameter is employee ID
 export const myGetChild = (node) =>{
     return {}
 }
-export const getParent = d => {
-  console.log("Inside getParent: ID requested: ", d)
-  axios.get("http://localhost:5000/company/"+d.cid+"/employee/"+2+"?treeDepth=3/manager")
-        .then(response=>{console.log(response)}).catch(error=>{console.log("Error: ", error)})
-    return {
-        // children: [],
-    }
+export async function getParent  (d) {
+  let response = await (fetch(url+"company/"+d.cid+"/employee/"+d.id+"/manager?treeDepth="+3))
+  let js = await response.json()
+  let tr = await  translate(js)
+    return tr
   }
 
 
