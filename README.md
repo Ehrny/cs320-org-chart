@@ -9,13 +9,14 @@
     - PowerShell (windows): PS C:\> .venv\Scripts\Activate.ps1
     - bash/zsh: $ source .venv/bin/activate
     - other shells: see https://docs.python.org/3/library/venv.html
-* ensure that you are in the venv (should have venv in front of your shell prompt)
-* run "python -m pip install -r requirements.txt
-* Install mongodb and make sure mongod is running.
-* navigate to mongodbStuff
+* Ensure that you are in the venv (should have venv in front of your shell prompt).
+* Run "python -m pip install -r requirements.txt".
+* Examine ENV_FILE_INSTRUCTIONS file for instructions on creating backend/.env file.
+* Install Mongodb and make sure mongod service is running.
+* Navigate to mongodbStuff directory.
 * run "{pythoncommand} importJSON.py" to initialize the database
-* If you are in a unix, run "./run.sh". If you're on windows, run "run.bat". If that doesn't work either fix it or let slack know, it's untested.
-* The app should launch on **localhost:5000**
+* Navigate to backend directory. If you are using Unix, run "./run.sh". If you're on Windows, run "run.bat".
+* The app should launch on **localhost:5000**.
 
 
 
