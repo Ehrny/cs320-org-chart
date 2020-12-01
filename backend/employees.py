@@ -57,7 +57,32 @@ def employee_manager_by_id(db: pymongo.MongoClient, company_id: int, employee_id
         {"employeeId": managerID, "companyId": company_id}
     )
     return employee_tree(db, employee_doc_2, tree_depth)
+def add_employee_to_db(db: pymongo.MongoClient, employee_dict: dict):
+    db["Employees"].insert_one(employee_dict)
+    return "success"
 
+def drop_employee_from_db(db: pymongo.MongoClient, dropped_employee: dict):
+    #get all employees under current and set their manager to new manager
+    #employees under is a cursor object
+
+    print("deleting")
+    employee_check = db["Employees"].delete_one({"employeeId": dropped_employee["employeeId"]})
+
+    employees_under = db["Employees"].find(
+        {"managerId" : dropped_employee.get("employeeId"), "companyId" : dropped_employee.get("companyId")}
+    )
+    # loop through current managers workers and call the edit their manager
+    for employee in employees_under:
+        db["Employees"].update(employee,
+            {'$set': {"managerId" : dropped_employee.get("managerId")}})
+    return "success"
+
+
+def edit_employee(db: pymongo.MongoClient, company_Id: int, employee_Id: int, updated: dict):
+    employee = db["Employees"].find_one({"employeeId": employee_Id, "companyId": company_Id})
+    db["Employees"].update(employee, updated)
+    return "success"
+    
 def login(db: pymongo.MongoClient, username: str, password: str):
     pload = {
         # 'username': username,
