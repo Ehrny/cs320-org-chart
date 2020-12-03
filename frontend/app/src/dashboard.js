@@ -226,15 +226,15 @@ export class Dashboard extends React.Component {
             isManager: json.isManager, employeeId: json.employeeId, email: json.email, startDate: json.startDate
           })
         })
-      this.setState({ tree: null })
+      
       let resp2 = fetch('/company/' + this.state.companyId + '/employee/' + emplID + '?treeDepth=' + this.state.defaultTreeDepth)
         .then(response => { return response.json() })
-        .then(json => { this.setState({ getChartfromRoot: json.employeeId, didTreeChange: true, tree: handleFetchedTree(json) }); })
+        .then(json => { this.setState({ tree: null }); this.setState({ tree: null });this.setState({ getChartfromRoot: json.employeeId, didTreeChange: true, tree: handleFetchedTree(json) }); })
     }
 
 
     if (this.state.searchparam === 'First') {
-      this.setState({ tree: null })
+      
       console.log('searching by: ', this.state.searchparam)
       let resp = fetch('/company/' + this.state.companyId + '/search/firstName?q=' + emplID)
         //let resp = fetch('/naivelogin/'+emplID)//company/3/employee/1')
@@ -245,7 +245,7 @@ export class Dashboard extends React.Component {
             password: json.results[0].password, positionTitle: json.results[0].positionTitle, companyName: json.results[0].companyName,
             isManager: json.results[0].isManager, employeeId: json.results[0].employeeId, email: json.results[0].email, startDate: json.results[0].startDate
           })
-          fetch('/company/' + this.state.companyId + '/employee/' + json.results[0].employeeId + '?treeDepth=' + this.state.defaultTreeDepth).then(response2 => { return response2.json() }).then(json2 => { console.log("Search result: ", json2); this.setState({ tree: handleFetchedTree(json2) }) })
+          fetch('/company/' + this.state.companyId + '/employee/' + json.results[0].employeeId + '?treeDepth=' + this.state.defaultTreeDepth).then(response2 => { return response2.json() }).then(json2 => { console.log("Search result: ", json2);this.setState({ tree: null }); this.setState({ tree: handleFetchedTree(json2) }) })
         }
 
         );
@@ -254,7 +254,7 @@ export class Dashboard extends React.Component {
     if (this.state.searchparam === 'Last') {
       console.log("Searching by lastname")
       let holdstate = this.state.tree;
-      this.setState({ tree: null })
+      
       console.log('searching by: ', this.state.searchparam)
       let resp =
         fetch('/company/' + this.state.companyId + '/search/lastName?q=' + emplID)
@@ -265,7 +265,7 @@ export class Dashboard extends React.Component {
               password: json.results[0].password, positionTitle: json.results[0].positionTitle, companyName: json.results[0].companyName, isManager: json.results[0].isManager,
               employeeId: json.results[0].employeeId, email: json.results[0].email, startDate: json.results[0].startDate
             })
-            fetch('/company/' + this.state.companyId + '/employee/' + json.results[0].employeeId + '?treeDepth=' + this.state.defaultTreeDepth).then(response2 => response2.json()).then(json2 => { this.setState({ tree: handleFetchedTree(json2) }) })
+            fetch('/company/' + this.state.companyId + '/employee/' + json.results[0].employeeId + '?treeDepth=' + this.state.defaultTreeDepth).then(response2 => response2.json()).then(json2 => {this.setState({ tree: null }); this.setState({ tree: handleFetchedTree(json2) }) })
           })
     }
   }
