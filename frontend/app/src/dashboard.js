@@ -47,8 +47,8 @@ export class Dashboard extends React.Component{
           highlightPostNumbers: [1],searchparam : 'First', addEmp: false,dropEmp: false, editEmp: false,firstName : '',lastName : '',
           companyId : user.companyId, password : '',
           positionTitle : '',companyName : '',
-          isManager : false,employeeId : user.employeeId, email : '',startDate : '',firstNameTemp: '',lastNameTemp: '',companyIdTemp: 0,
-          passwordTemp: '',positionTitleTemp: '',companyNameTemp: '',isManagerTemp: false,
+          isManager : false,employeeId : user.employeeId, email : '',startDate : '',firstNameTemp: '',lastNameTemp: '',companyIdTemp: user.companyId,
+          passwordTemp: '',positionTitleTemp: '',companyNameTemp: '',isManagerTemp: false, managerIdTemp:0,
           employeeIdTemp: 0, emailTemp: '', startDateTemp: '',transEmp: false, searcherror:"",
           managerId: 0,autoFirst: [], autoLast: [],  autoOption: [],  autoEmpty: [],  managerList: [], employeeList: [], 
           user: getUser(),
@@ -84,6 +84,14 @@ export class Dashboard extends React.Component{
           .catch(error=>{console.log("error: ",error)})
           //console.log('this.state.managerList ')
           //console.log(this.state.managerList)
+        }
+
+
+        DateOnChange=(date, dateString)=>{
+          console.log("this is dateString  " + dateString);
+          const str=dateString;
+          this.setState({
+          startDateTemp: dateString,});
         }
 
         checkIfTreeChanged(){
@@ -236,7 +244,7 @@ export class Dashboard extends React.Component{
                                       this.setState({firstName : json.results[0].firstName,lastName : json.results[0].lastName,companyId : json.results[0].companyId,
                                       password : json.results[0].password,positionTitle : json.results[0].positionTitle,companyName : json.results[0].companyName,
                                       isManager : json.results[0].isManager, employeeId : json.results[0].employeeId, email : json.results[0].email, startDate : json.results[0].startDate})
-                                      fetch('/company/'+this.state.companyId+'/employee/'+json.results[0].employeeId+'?treeDepth='+this.state.defaultTreeDepth).then(response2=>response2.json()).then(json2=>{this.setState({tree:handleFetchedTree(json2)})})
+                                      fetch('/company/'+this.state.companyId+'/employee/'+json.results[0].employeeId+'?treeDepth='+this.state.defaultTreeDepth).then(response2=>{return response2.json()}).then(json2=>{console.log("Search result: ", json2);this.setState({tree:handleFetchedTree(json2)})})
                                     }
                                     
                                   );
@@ -276,8 +284,70 @@ export class Dashboard extends React.Component{
                             .then(response => {return response.json()})
                             .then(json =>{this.setState({tree:handleFetchedTree(json)})})
         }
-
-
+        addSubmit() {
+          let body={
+            "firstName" : this.state.firstNameTemp,
+            "lastName" : this.state.lastNameTemp,
+            "companyId" : this.state.companyIdTemp,
+            "password" : this.state.passwordTemp,
+            "positionTitle" : this.state.positionTitleTemp,
+            "companyName" : this.state.companyNameTemp,
+            "isManager" : this.state.isManagerTemp,
+            "employeeId" : this.state.employeeIdTemp,
+            "email" : this.state.emailTemp,
+           "startDate" : this.state.startDateTemp,
+           "employees": [],
+      }
+            axios.post(url+"/import/company/1/add_to_db", body).then(res=>console.log("add response: ",res)).catch(error=>{console.log("Error: ", error)});
+        }
+        dropSubmit() {
+          // Simple POST request with a JSON body using axios
+          fetch("/import/company/1/drop_from_db", {
+            method: "POST",
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                  "firstName" : this.state.firstName,
+                  "lastName" : this.state.lastName,
+                  "companyId" : this.state.companyId,
+                  "password" : this.state.passwordTemp,
+                  "positionTitle" : this.state.positionTitle,
+                  "companyName" : this.state.companyName,
+                  "isManager" : this.state.isManager,
+                  "employeeId" : this.state.email,
+                  "email" : this.state.email,
+                  "startDate" : this.state.startDate,
+            })
+          }).then(res=>console.log(res));
+        
+        }
+        
+        editSubmit() {
+        
+          // Simple POST request with a JSON body using axios
+        
+          fetch("/import/company/1/employee/"+this.state.employeeIdTemp, {
+            method: "POST",
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                  "firstName" : this.state.firstNameTemp,
+                  "lastName" : this.state.lastNameTemp,
+                  "companyId" : this.state.companyIdTemp,
+                  "password" : this.state.passwordTemp,
+                  "positionTitle" : this.state.positionTitleTemp,
+                  "companyName" : this.state.companyNameTemp,
+                  "isManager" : this.state.isManagerTemp,
+                  "employeeId" : this.state.companyIdTemp,
+                  "email" : this.state.emailTemp,
+                  "startDate" : this.state.startDateTemp,
+            })
+          }).then(res=>console.log(res));
+        }
+        
+        
         handleLogout = () => {
           removeUserSession();
           this.props.history.push('/login');
@@ -285,6 +355,7 @@ export class Dashboard extends React.Component{
 
         render() {
           //console.log("Tree state at render:", this.state.tree)
+          const dateFormat = 'YYYY-MM-DD';
           if(this.state.tree===null)
             return (<p1 className="loading">Loading...</p1>);
           else
@@ -306,9 +377,7 @@ export class Dashboard extends React.Component{
                  label="First Name"
                  rules={[{required: false}]}
                >
-             <Input
-              value="ON9" onChange={this.on9}
-             />  
+             <Input name="firstNameTemp" onChange={this.handleAdd} />  
 
                </Form.Item>
          
@@ -317,7 +386,7 @@ export class Dashboard extends React.Component{
                  label="Last Name"
                  rules={[{required: false}]}
                >
-               <Input />   
+               <Input  name="lastNameTemp" onChange={this.handleAdd}/>   
                </Form.Item>
          
                <Form.Item
@@ -325,21 +394,21 @@ export class Dashboard extends React.Component{
                  label="Email"
                  rules={[{type: 'email',required: false, } ]}
                >
-                 <Input />
+                                  <Input name="emailTemp" onChange={this.handleAdd} />
                  
                </Form.Item>
                <Form.Item
                  name={['user', 'EmployeeID']}
                  label="EmployeeID"
                >
-                 <Input type='number'/>       
+              <Input type='number'   name="employeeIdTemp" onChange={this.handleAdd}/>             
                </Form.Item>
          
                <Form.Item
                  name={['user', 'ManagerID']}
                  label="ManagerID"
                >
-                 <InputNumber />       
+               <Input name="managerIdTemp" onChange={this.handleAdd} />             
                </Form.Item>
          
                <Form.Item
@@ -347,8 +416,10 @@ export class Dashboard extends React.Component{
                  label="Is Manager?"
                >
                <Select >
-                 <Option value="True">Yes</Option>
-                 <Option value="False">No</Option>
+               <Option value="True" name="isManagerTemp" onChange={this.handleAdd}>Yes
+                </Option>
+                <Option value="False" name="isManagerTemp" onChange={this.handleAdd} >No
+                </Option>
                </Select>
             
           </Form.Item>
@@ -357,20 +428,20 @@ export class Dashboard extends React.Component{
                  name={['user', 'startDate']}
                  label="startDate"
                >
-               <DatePicker style={{ width: '50%' }} />
-          </Form.Item>
+          <DatePicker format={dateFormat} onChange= {this.DateOnChange} style={{ width: '50%' }} />
+           </Form.Item>
          
                <Form.Item name={['user', 'positionTitle']} label="positionTitle">
-                 <Input />
+               <Input name="positionTitleTemp" onChange={this.handleAdd} />
                </Form.Item>
                <Form.Item name={['user', 'Tag']} label="Tag">
                  <Input.TextArea />
                </Form.Item>
                <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
-                                    <Button type="primary" htmlType="submit">
-                                      Submit
-                                    </Button>
-                                  </Form.Item>
+               <Button type="primary" htmlType="submit" onClick={()=>this.addSubmit()}>  
+                    Submit
+                  </Button>
+                </Form.Item>
 
                             </Form>
                       </Modal>
@@ -480,10 +551,10 @@ export class Dashboard extends React.Component{
                  label="ManagerID"
                >
                  <Input 
-                    placeholder = {this.state.ManagerID} 
+                    placeholder = {this.state.managerId} 
                     type="text"
-                    name="ManagerIDTemp"
-                    value={this.state.ManagerID}
+                    name="managerIdTemp"
+                    value={this.state.managerId}
                     onChange={this.handleEdit} 
                     />    
                </Form.Item>
@@ -493,8 +564,11 @@ export class Dashboard extends React.Component{
                  label="Is Manager?"
                >
                <Select defaultValue="Option1-1">
-                 <Option value="Option1-1">Yes</Option>
-                 <Option value="Option1-2">No</Option>
+               <Option value="True" name="isManagerTemp" onChange={this.handleAdd}> Yes
+                </Option>
+              <Option value="False" name="isManagerTemp" onChange={this.handleAdd} >No
+
+               </Option>
             
                </Select>
             

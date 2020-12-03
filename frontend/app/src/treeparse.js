@@ -75,7 +75,9 @@ const parseChildren = (obj) =>{
 export const translate = (obj) =>{
   let id=0,avatar=null, department='', name='', title='', totalReports=0, 
   person={}, this_hasChild=(obj.employees===null)?false:true, this_hasParent= (obj.employeeId===1)?false:true, 
-  rchildren=[];
+  rchildren=[]; let this_employees = [];
+  if((obj.employees)===null) this_employees=0
+  else this_employees=obj.employees.length 
   //console.log('translating: ', obj.employeeId, ' is array test: ',  Array.isArray(obj.employees));
     let exporting = {
       id: obj.employeeId,
@@ -86,7 +88,7 @@ export const translate = (obj) =>{
         department: '',
         name: obj.firstName+' '+obj.lastName,
         title: obj.positionTitle,
-        totalReports: (obj.employees!==null)?obj.employees.length:0,
+        totalReports: this_employees,
       },
       hasChild: this_hasChild,
       hasParent: this_hasParent,

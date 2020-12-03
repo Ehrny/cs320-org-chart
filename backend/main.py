@@ -161,6 +161,7 @@ fetch("/import/company/1/add_to_db", {
 @app.route('/import/company/<company_id>/add_to_db', methods=['POST'])
 def route_add_employee_to_db(company_id: str):
     #checks to make sure employee is in correct company
+    print("received data: ", request.get_json())
     if (request.get_json() != None):
         employee_dict = request.get_json()
         if (int(company_id) == employee_dict.get("companyId")):
