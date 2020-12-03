@@ -6,11 +6,9 @@ import employees
 import links
 import config; config.load_config(".testenv")
 
-client = pymongo.MongoClient(config.MONGO_URL)
-db = client[config.MONGO_DB]
 
 @pytest.fixture
-def database_init():
+def db():
     with open('testdata.json') as f:
         testdata = json.load(f)
     

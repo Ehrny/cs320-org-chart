@@ -112,7 +112,7 @@ def route_create_new_request(company_id: str):
     if (request.get_json() != None):
         request_dict = request.get_json()
         if (company_id == request_dict.get(company_id)):
-            return requests.create_request(db, request_dict)
+            return manager_requests.create_request(db, request_dict)
     return -1
 
 # Url: /import/company/<company_id>/get_requests
@@ -125,7 +125,7 @@ def route_create_new_request(company_id: str):
 def route_get_requests(company_id: str, employee_id):
 
     if (company_id == request_dict.get(company_id)):
-        return requests.get_requests(db, employee_id, company_id)
+        return manager_requests.get_requests(db, employee_id, company_id)
     return -1
 
 
@@ -139,7 +139,7 @@ def route_get_requests(company_id: str, employee_id):
 # Returns: 1 or -1 depending on success
 @app.route('/company/<company_id>/manager/<to_manager>/frommanager/<to_manager/employee/<employee_id>/approval_id/<approval_id>/denied')
 def route_deny_request(comapny_id:str,to_manager: str, from_manager: str, employee_moved: str, approval_id: str):
-    return requests.deny_request(db, company_id, to_manager, from_manager, employee_moved, approval_id)
+    return manager_requests.deny_request(db, company_id, to_manager, from_manager, employee_moved, approval_id)
 
 # Url: '/company/<company_id>/manager/<to_manager>/frommanager/<to_manager/employee/<employee_id>/approval_id/<approval_id>/approved'
 # Method: GET
@@ -149,7 +149,7 @@ def route_deny_request(comapny_id:str,to_manager: str, from_manager: str, employ
 # Returns: 1 or -1 depending on success
 @app.route('/company/<company_id>/manager/<to_manager>/frommanager/<to_manager/employee/<employee_id>/approval_id/<approval_id>/approved')
 def route_approve_request(comapny_id:str,to_manager: str, from_manager: str, employee_moved: str, approval_id: str):
-    return requests.approve_request(db, company_id, to_manager, from_manager, employee_moved, approval_id)
+    return manager_requests.approve_request(db, company_id, to_manager, from_manager, employee_moved, approval_id)
 
 # @app.route('/company/<company_id>/login', methods=['POST'])
 # def route_login(company_id: str):

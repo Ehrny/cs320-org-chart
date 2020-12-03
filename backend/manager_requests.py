@@ -24,15 +24,19 @@ import dns
 
 # takes a request dictionary and checks that it does not already exist 
 # as well as checking that the dictinary contains all needed types
-def validate_request(request_dict: dict):
+def validate_request(db :pymongo.MongoClient, request_dict: dict):
     doc = db["Requests"].find_one({"to_manager": request_dict["to_manager"],
     "from_manager": request_dict["from_manager"],
-    "employee_id_moved": request_dict["employee_id"]})
-    if (doc):
-        if (request_dict.has_key("type") and request_dict.has_key("company_id") and
-            request_dict.has_key("to_manager") and request_dict.has_key("from_manager") and
-            request_dict.has_key("approvals")):
+    "moved_employee": request_dict["moved_employee"]})
+    print(not doc)
+    if (not doc):
+
+        request_keys = request_dict.keys()
+        if ("type" in request_keys and "company_id" in request_keys and
+            "to_manager" in request_keys and "from_manager" in request_keys and
+            "approvals" in request_keys):
             return 1
+
     return -1
 
 #change the approval to true
@@ -42,7 +46,7 @@ def approve_request(db: pymongo.MongoClient, company_id: str, to_manager: str, f
     doc = db["Requests"].find_one({"to_manager": request_dict["to_manager"],
                         "company_id" : request_dict[company_id],
                        "from_manager": request_dict["from_manager"],
-                       "employee_id_moved": request_dict["employee_id"]})
+                       "moved_employee": request_dict["employee_id"]})
     doc[approvals][approval_id] = True
     allApproved = True
     for approval in doc[approvals]:
@@ -60,7 +64,7 @@ def approve_request(db: pymongo.MongoClient, company_id: str, to_manager: str, f
         for employee in employees_under:
             db["Employees"].update(employee, {'$set': {"managerId": from_manager}})
 
-        db["Requests"].delete_many({ "company_id" : request_dict[company_id], "employee_id_moved": request_dict["employee_id"]})
+        db["Requests"].delete_many({ "company_id" : request_dict[company_id], "moved_employee": request_dict["employee_id"]})
 
         if (doc):
             return 1
@@ -74,14 +78,14 @@ def approve_request(db: pymongo.MongoClient, company_id: str, to_manager: str, f
 def deny_request(db: pymongo.MongoClient, company_id: str, to_manager: str, from_manager: str, employee_moved: str, approval_id: str):
     doc = db["Requests"].delete_one({"to_manager": request_dict["to_manager"], "company_id" : request_dict[company_id],
                            "from_manager": request_dict["from_manager"],
-                           "employee_id_moved": request_dict["employee_id"]})
+                           "moved_employee": request_dict["employee_id"]})
     if (doc):
         return 1
     return -1
 
 
 # find all approvals that need to be approved or denied by sent employee
-def get_requests(db :pymongo.MOngoClient, employee_id, company_id):
+def get_requests(db :pymongo.MongoClient, employee_id, company_id):
     list = []
     cursor1 = db["Requests"].find({"company_id": company_id,"approvals": {employee_id : False}})
     for request in cursor1:
@@ -90,12 +94,12 @@ def get_requests(db :pymongo.MOngoClient, employee_id, company_id):
 
 # checks to see if request is valid before adding it to the approvals dictionary
 def create_request(db: pymongo.MongoClient, request_dict: dict):
-    if (validate_request(request_dict) != -1):
+    if(validate_request(db, request_dict) != 1):
         return -1
     #add double check that request is not already contained
-    if (len(request_dict[approvals]) == 0):
-        request_dict[approvals][request_dict["to_manager"]] = False
-        request_dict[approvals][request_dict["from_manager"]] = False
+    if (len(request_dict["approvals"]) == 0):
+        request_dict["approvals"][request_dict["to_manager"]] = False
+        request_dict["approvals"][request_dict["from_manager"]] = False
 
     db["Requests"].insert_one(request_dict)
     return 1
