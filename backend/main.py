@@ -111,7 +111,7 @@ def route_search_field(company_id: str, field: str):
 def route_create_new_request(company_id: str):
     if (request.get_json() != None):
         request_dict = request.get_json()
-        if (company_id == request_dict.get(company_id)):
+        if (int(company_id) == request_dict.get("companyId")):
             return manager_requests.create_request(db, request_dict)
     return -1
 
@@ -122,34 +122,40 @@ def route_create_new_request(company_id: str):
 # URL Parameters: company_id, employee_id
 # Returns: an array of request objs
 @app.route('/company/<company_id>/employee/<employee_id>/get_requests/')
-def route_get_requests(company_id: str, employee_id):
+def route_get_requests(company_id: str, employee_id:str):
 
-    if (company_id == request_dict.get(company_id)):
+    if (company_id == request_dict.get("company_id")):
         return manager_requests.get_requests(db, employee_id, company_id)
     return -1
 
 
 
 
-# Url: '/company/<company_id>/manager/<to_manager>/frommanager/<to_manager/employee/<employee_id>/approval_id/<approval_id>/denied'
+# Url: '/company/<company_id>/deny_request'
 # Method: GET
 # Body: None
 # Headers: default
-# URL Parameters: comapny_id:str,to_manager: str, from_manager: str, employee_moved: str, approval_id: str
+# URL Parameters: needs a request dictionary (does not need the approvals in the dictionary)
 # Returns: 1 or -1 depending on success
-@app.route('/company/<company_id>/manager/<to_manager>/frommanager/<to_manager/employee/<employee_id>/approval_id/<approval_id>/denied')
-def route_deny_request(comapny_id:str,to_manager: str, from_manager: str, employee_moved: str, approval_id: str):
-    return manager_requests.deny_request(db, company_id, to_manager, from_manager, employee_moved, approval_id)
-
+@app.route('/company/<company_id>/deny_request', methods = ['POST'])
+def route_deny_request(company_id: int):
+    if (request.get_json() != None):
+        request_dict = request.get_json()
+        if (int(company_id) == request_dict.get("companyId")):
+            return manager_requests.deny_request(db, request_dict)
+    return -1
 # Url: '/company/<company_id>/manager/<to_manager>/frommanager/<to_manager/employee/<employee_id>/approval_id/<approval_id>/approved'
 # Method: GET
 # Body: None
 # Headers: default
 # URL Parameters: comapny_id:str,to_manager: str, from_manager: str, employee_moved: str, approval_id: str
 # Returns: 1 or -1 depending on success
-@app.route('/company/<company_id>/manager/<to_manager>/frommanager/<to_manager/employee/<employee_id>/approval_id/<approval_id>/approved')
-def route_approve_request(comapny_id:str,to_manager: str, from_manager: str, employee_moved: str, approval_id: str):
-    return manager_requests.approve_request(db, company_id, to_manager, from_manager, employee_moved, approval_id)
+@app.route('/company/<company_id>/<approval_id>/approved', methods = ['POST'])
+def route_approve_request(comapny_id: int, approval_id: str):
+    if (request.get_json() != None):
+        request_dict = request.get_json()
+        if (int(company_id) == request_dict.get("companyId")):
+            return manager_requests.approve_request(db, request_dict, approval_id)
 
 # @app.route('/company/<company_id>/login', methods=['POST'])
 # def route_login(company_id: str):
