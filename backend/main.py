@@ -101,7 +101,7 @@ def route_search_field(company_id: str, field: str):
     return search.search_field(db, int(company_id), query, field)
 
 
-@app.route('/company/login', methods=['POST'])
+@app.route('/login', methods=['POST'])
 def route_login():
     # req = Flask.request.get_json(force=True)
     # username = req.get('username', None)
