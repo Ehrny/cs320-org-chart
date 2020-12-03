@@ -276,14 +276,14 @@ export class Dashboard extends React.Component {
       return;
     }
     console.log("depthchange: ", value)
-    let temp = this.state.tree;
+    
     this.setState({ tree: null })
     this.setState({ defaultTreeDepth: value })
     console.log("ID", temp.id)
     let resp = fetch('/company/' + this.state.companyId + '/employee/' + temp.id + '?treeDepth=' + value)
       //let resp = fetch('/naivelogin/'+emplID)//company/3/employee/1')
       .then(response => { return response.json() })
-      .then(json => { this.setState({ tree: handleFetchedTree(json) }) })
+      .then(json => { let temp = this.state.tree;this.setState({ tree: handleFetchedTree(json) }) })
   }
   addSubmit() {
     let body = {
