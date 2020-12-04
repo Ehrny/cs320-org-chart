@@ -165,7 +165,7 @@ def route_approve_request(comapny_id: int, approval_id: str):
 #     username: str = request.args.get("username", "")
 #     password: str = request.args.get("password", "")
 #     return employees.login(int(company_id), username, password)
-=======
+
 @app.route('/login', methods=['POST'])
 def route_login():
     # req = Flask.request.get_json(force=True)
