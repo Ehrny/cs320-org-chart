@@ -7,6 +7,7 @@ import employees
 import links
 import config; config.load_config(".testenv")
 
+
 @pytest.fixture
 def db():
     with open('testdata.json') as f:
@@ -22,6 +23,7 @@ def db():
     yield db
 
     db["Employees"].drop()
+
 
 def test_employee_by_id_trivial(db: pymongo.MongoClient):
     res = employees.employee_by_id(db, 1, 1, 0)

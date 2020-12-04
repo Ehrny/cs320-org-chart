@@ -169,7 +169,9 @@ def edit_employee(db: pymongo.MongoClient, company_Id: int, employee_Id: int, up
     db["Employees"].update(employee, updated)
     return "success"
 
+
 def hash_pw(password: str):
     salt = bcrypt.gensalt()
     hashed = bcrypt.hashpw(password, salt)
     return hashed
+
