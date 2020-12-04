@@ -14,7 +14,7 @@ import { getUser, removeUserSession } from './components/session';
 import axios from 'axios';
 
 
-const url = "http://localhost:5000/"
+const url = "http://161.35.55.104/api"
 
 const key = 'updatable';
 
@@ -49,7 +49,7 @@ export class Dashboard extends React.Component {
       isManager: false, employeeId: user.employeeId, email: '', startDate: '', firstNameTemp: '', lastNameTemp: '', companyIdTemp: user.companyId,
       passwordTemp: '', positionTitleTemp: '', companyNameTemp: '', isManagerTemp: false, managerIdTemp: 0,
       employeeIdTemp: user.employeeId, emailTemp: '', startDateTemp: '', transEmp: false, searcherror: "",
-      managerId: 0, autoFirst: [], autoLast: [], autoOption: [], autoEmpty: [], managerList: [], employeeList: [],
+      managerId: 0, autoFirst: [], autoLast: [], autoOption: [], autoEmpty: [], managerList: [], employeeList: [], autofull:[],
       user: JSON.parse(getUser()),
       notifs: []
     };
@@ -64,16 +64,18 @@ export class Dashboard extends React.Component {
 
     const response = await fetch(url+'/company/' + this.state.companyId + '/search/firstName?q=');
     const json = await response.json();
-    //console.log(json.results)
+    console.log("jsonresults:", json.results)
     this.setState(state => {
       for (const [index] of json.results.entries()) {
         this.state.autoFirst.push({ value: json.results[index].firstName })
         this.state.autoLast.push({ value: json.results[index].lastName })
         this.state.autoOption.push({ value: json.results[index].firstName })
+        this.state.autofull.push({value: (json.results[index].firstName+  ' ' + json.results[index].lastName)})
         if (json.results[index].isManager == true)
           this.state.managerList.push({ value: json.results[index].firstName + ' ' + json.results[index].lastName })
-        else
+        else{
           this.state.employeeList.push({ value: json.results[index].firstName + ' ' + json.results[index].lastName })
+        }
       }
     });
 
@@ -168,7 +170,7 @@ export class Dashboard extends React.Component {
     this.setState({ searchparam: sp })
     console.log(`selected ${sp}`);
     if (searchparam === 'First') {
-      this.setState({ autoOption: this.state.autoFirst })
+      this.setState({ autoOption: this.state.autofull })
     } else if (searchparam === 'Last') {
       this.setState({ autoOption: this.state.autoLast })
     } else if (searchparam === 'EmplID') {
@@ -235,7 +237,9 @@ export class Dashboard extends React.Component {
     if (this.state.searchparam === 'First') {
       
       console.log('searching by: ', this.state.searchparam)
-      let resp = fetch(url+'/company/' + this.state.companyId + '/search/firstName?q=' + emplID)
+      let name = emplID.split(" ")
+      console.log("Name split: ", name);
+      let resp = fetch(url+'/company/' + this.state.companyId + '/search/firstName?q=' + name[0])
         //let resp = fetch(url+'/naivelogin/'+emplID)//company/3/employee/1')
         .then(response => { return response.json() })
         .then(json => {
@@ -385,7 +389,8 @@ export class Dashboard extends React.Component {
     removeUserSession();
     this.props.history.push('/login');
   }
-
+  viewfunc = () =>{
+  }
   render() {
     //console.log("Tree state at render:", this.state.tree)
     const dateFormat = 'YYYY-MM-DD';
@@ -397,9 +402,9 @@ export class Dashboard extends React.Component {
 
           <Sider collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse} theme="dark">
 
-            <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
+            <Menu theme="dark" defaultSelectedKeys={['2']} mode="inline">
 
-              <Menu.Item key="2" onClick={this.view} icon={<DesktopOutlined />}>View</Menu.Item>
+              <Menu.Item key="2" onClick={this.viewfunc()} icon={<DesktopOutlined />}>View</Menu.Item>
               <SubMenu key="sub1" icon={<UserOutlined />} title="Manage">
                 <Menu.Item key="3" onClick={() => this.addEmp(true)}> add </Menu.Item>
 
@@ -660,34 +665,7 @@ export class Dashboard extends React.Component {
                 visible={this.state.modal5Visible}
                 onCancel={() => this.transEmp(false)}>
                 <hr></hr>
-                <Select
-                  showSearch
-                  style={{ width: 200 }}
-                  placeholder="From Manager"
-                  optionFilterProp="children"
-                  onChange={value => this.onManageChange(value)}
-
-                  options={this.state.managerList}
-                  onSearch={value => this.onManageSearch(value)}
-                  filterOption={(inputValue, option) =>
-                    option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                  }
-                >
-                </Select>
                 <span>{'                       '}</span>
-                <Select
-                  showSearch
-                  style={{ width: 200 }}
-                  placeholder="To Manager"
-                  optionFilterProp="children"
-                  onChange={value => this.onManageChange(value)}
-
-                  options={this.state.managerList}
-                  onSearch={value => this.onManageSearch(value)}
-                  filterOption={(inputValue, option) =>
-                    option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                  }
-                ></Select>              <br />              <br />
                 <Select
                   showSearch
                   style={{ width: 200 }}
@@ -701,6 +679,20 @@ export class Dashboard extends React.Component {
                     option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
                   }
                 ></Select>
+                <Select
+                  showSearch
+                  style={{ width: 200 }}
+                  placeholder="To Manager"
+                  optionFilterProp="children"
+                  onChange={value => this.onManageChange(value)}
+
+                  options={this.state.managerList}
+                  onSearch={value => this.onManageSearch(value)}
+                  filterOption={(inputValue, option) =>
+                    option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                  }
+                ></Select>              <br />              <br />
+                
                 <br />              <br />
                 <Button type="primary" htmlType="submit">
                   Submit
@@ -720,14 +712,13 @@ export class Dashboard extends React.Component {
 
                 <img src={logo} className='img' alt="logo" />
                 <Select className="selectColumn" defaultValue="First" onChange={this.handleSearchparamChange} size="small">
-                  <Option value="First" >First Name</Option>
-                  <Option value="Last">Last Name</Option>
+                  <Option value="First" >Full Name</Option>
                   <Option value="EmplID"> Employee ID</Option>
                 </Select>
                 <AutoComplete
                   className="autoSearch2"
                   dropdownClassName="certain-category-search-dropdown"
-                  options={this.state.autoOption}
+                  options={this.state.autofull}
                   filterOption={(inputValue, option) =>
                     option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
                   }

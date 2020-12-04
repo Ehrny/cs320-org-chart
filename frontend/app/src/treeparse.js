@@ -4,7 +4,7 @@ import avatarPersonnel from './assets/avatar-personnel.svg'
 import { map } from 'd3';
 import axios from 'axios';
 
-const url = 'http://localhost:5000/'
+const url = 'http://161.35.55.104/api'
 const TreeArr = [];   //Split the nested tree into array of subtrees for rendering
 const splitTrees = [];
 
