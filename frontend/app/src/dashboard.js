@@ -70,7 +70,7 @@ export class Dashboard extends React.Component {
         this.state.autoFirst.push({ value: json.results[index].firstName })
         this.state.autoLast.push({ value: json.results[index].lastName })
         this.state.autoOption.push({ value: json.results[index].firstName })
-        this.state.autofull.push({value: (json.results[index].firstName+  ' ' + json.results[index].lastName)})
+        this.state.autofull.push({value: (json.results[index].email)})
         if (json.results[index].isManager == true)
           this.state.managerList.push({ value: json.results[index].firstName + ' ' + json.results[index].lastName })
         else{
@@ -239,7 +239,7 @@ export class Dashboard extends React.Component {
       console.log('searching by: ', this.state.searchparam)
       let name = emplID.split(" ")
       console.log("Name split: ", name);
-      let resp = fetch(url+'/company/' + this.state.companyId + '/search/firstName?q=' + name[0])
+      let resp = fetch(url+'/company/' + this.state.companyId + '/search/email?q=' + emplID)
         //let resp = fetch(url+'/naivelogin/'+emplID)//company/3/employee/1')
         .then(response => { return response.json() })
         .then(json => {
@@ -712,7 +712,7 @@ export class Dashboard extends React.Component {
 
                 <img src={logo} className='img' alt="logo" />
                 <Select className="selectColumn" defaultValue="First" onChange={this.handleSearchparamChange} size="small">
-                  <Option value="First" >Full Name</Option>
+                  <Option value="First" >name/email</Option>
                   <Option value="EmplID"> Employee ID</Option>
                 </Select>
                 <AutoComplete
