@@ -46,6 +46,7 @@ def employee_by_id(db: pymongo.MongoClient, company_id: int , employee_id: int, 
     )
     if employee_doc is None:
         return json.dumps({ "error": "not found"})
+    print("on searchreturned: ", employee_doc)
     return employee_tree(db, employee_doc, tree_depth)
 
 def employee_manager_by_id(db: pymongo.MongoClient, company_id: int, employee_id: int, levels: int, tree_depth: int):

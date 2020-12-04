@@ -49,7 +49,7 @@ export class Dashboard extends React.Component {
       positionTitle: '', companyName: '',
       isManager: false, employeeId: user.employeeId, email: '', startDate: '', firstNameTemp: '', lastNameTemp: '', companyIdTemp: user.companyId,
       passwordTemp: '', positionTitleTemp: '', companyNameTemp: '', isManagerTemp: false, managerIdTemp: 0,
-      employeeIdTemp: 0, emailTemp: '', startDateTemp: '', transEmp: false, searcherror: "",
+      employeeIdTemp: user.employeeId, emailTemp: '', startDateTemp: '', transEmp: false, searcherror: "",
       managerId: 0, autoFirst: [], autoLast: [], autoOption: [], autoEmpty: [], managerList: [], employeeList: [],
       user: getUser(),
       notifs: []
@@ -201,7 +201,7 @@ export class Dashboard extends React.Component {
     this.setState({ modal3Visible });
     this.setState({
       firstNameTemp: this.state.firstName, lastNameTemp: this.state.lastName, companyIdTemp: this.state.companyId,
-      passwordTemp: this.state.password, positionTitleTemp: this.state.positionTitle, companyNameTemp: this.state.companyName,
+      passwordTemp: this.state.password, positionTitleTemp: this.state.positionTitle, companyNameTemp: this.state.companyName, 
       isManagerTemp: this.state.isManager, employeeIdTemp: this.state.employeeId, emailTemp: this.state.email, startDateTemp: this.state.startDate,
     });
   }
@@ -222,7 +222,7 @@ export class Dashboard extends React.Component {
         .then(json => {
           this.setState({
             firstName: json.firstName, lastName: json.lastName, companyId: json.companyId,
-            password: json.password, positionTitle: json.positionTitle, companyName: json.companyName,
+            password: json.password, positionTitle: json.positionTitle, companyName: json.companyName, managerId: json.managerId,
             isManager: json.isManager, employeeId: json.employeeId, email: json.email, startDate: json.startDate
           })
         })
@@ -242,7 +242,7 @@ export class Dashboard extends React.Component {
         .then(json => {
           this.setState({
             firstName: json.results[0].firstName, lastName: json.results[0].lastName, companyId: json.results[0].companyId,
-            password: json.results[0].password, positionTitle: json.results[0].positionTitle, companyName: json.results[0].companyName,
+            password: json.results[0].password, positionTitle: json.results[0].positionTitle, companyName: json.results[0].companyName,managerId: json.results[0].managerId,
             isManager: json.results[0].isManager, employeeId: json.results[0].employeeId, email: json.results[0].email, startDate: json.results[0].startDate
           })
           fetch('/company/' + this.state.companyId + '/employee/' + json.results[0].employeeId + '?treeDepth=' + this.state.defaultTreeDepth).then(response2 => { return response2.json() }).then(json2 => { console.log("Search result: ", json2);this.setState({ tree: null }); this.setState({ tree: handleFetchedTree(json2) }) })
@@ -262,7 +262,7 @@ export class Dashboard extends React.Component {
           .then(json => {
             this.setState({
               firstName: json.results[0].firstName, lastName: json.results[0].lastName, companyId: json.results[0].companyId,
-              password: json.results[0].password, positionTitle: json.results[0].positionTitle, companyName: json.results[0].companyName, isManager: json.results[0].isManager,
+              password: json.results[0].password, positionTitle: json.results[0].positionTitle, managerId: json.results[0].managerId, companyName: json.results[0].companyName, isManager: json.results[0].isManager,
               employeeId: json.results[0].employeeId, email: json.results[0].email, startDate: json.results[0].startDate
             })
             fetch('/company/' + this.state.companyId + '/employee/' + json.results[0].employeeId + '?treeDepth=' + this.state.defaultTreeDepth).then(response2 => response2.json()).then(json2 => {this.setState({ tree: null }); this.setState({ tree: handleFetchedTree(json2) }) })
@@ -294,7 +294,8 @@ export class Dashboard extends React.Component {
       "positionTitle": this.state.positionTitleTemp,
       "companyName": this.state.companyNameTemp,
       "isManager": this.state.isManagerTemp,
-      "employeeId": this.state.employeeIdTemp,
+      "managerId": parseInt(this.state.managerIdTemp),
+      "employeeId": parseInt(this.state.employeeIdTemp),
       "email": this.state.emailTemp,
       "startDate": this.state.startDateTemp,
       "employees": [],
@@ -340,7 +341,8 @@ export class Dashboard extends React.Component {
         "positionTitle": this.state.positionTitle,
         "companyName": this.state.companyName,
         "isManager": this.state.isManager,
-        "employeeId": this.state.email,
+        "managerId": this.state.managerId,
+        "employeeId": this.state.employeeId,
         "email": this.state.email,
         "startDate": this.state.startDate,
       })
@@ -364,6 +366,7 @@ export class Dashboard extends React.Component {
         "password": this.state.passwordTemp,
         "positionTitle": this.state.positionTitleTemp,
         "companyName": this.state.companyNameTemp,
+        "managerId": this.state.managerIdTemp,
         "isManager": this.state.isManagerTemp,
         "employeeId": this.state.companyIdTemp,
         "email": this.state.emailTemp,
@@ -496,7 +499,7 @@ export class Dashboard extends React.Component {
                     <Descriptions.Item label="Company ID">{this.state.companyId}</Descriptions.Item>
                     <Descriptions.Item label="Manager">{this.state.isManager.toString()}</Descriptions.Item>
                     <Descriptions.Item label="Employee ID">{this.state.employeeId}</Descriptions.Item>
-                    <Descriptions.Item label="Manager ID">{this.state.man}</Descriptions.Item>
+                    <Descriptions.Item label="Manager ID">{this.state.managerId}</Descriptions.Item>
                     <Descriptions.Item label="Start Date">{this.state.startDate}</Descriptions.Item>
                     <Descriptions.Item label="Email">{this.state.email}</Descriptions.Item>
                   </Descriptions>
@@ -783,7 +786,7 @@ export class Dashboard extends React.Component {
                     <Descriptions.Item label="Company ID">{this.state.companyId}</Descriptions.Item>
                     <Descriptions.Item label="Manager">{this.state.isManager.toString()}</Descriptions.Item>
                     <Descriptions.Item label="Employee ID">{this.state.employeeId}</Descriptions.Item>
-                    <Descriptions.Item label="Manager ID">{this.state.man}</Descriptions.Item>
+                    <Descriptions.Item label="Manager ID">{this.state.managerId}</Descriptions.Item>
                     <Descriptions.Item label="Start Date">{this.state.startDate}</Descriptions.Item>
                     <Descriptions.Item label="Email">{this.state.email}</Descriptions.Item>
                   </Descriptions>
