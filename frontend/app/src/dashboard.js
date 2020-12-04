@@ -41,17 +41,16 @@ export class Dashboard extends React.Component {
   constructor(props) {
 
     super(props);
-    let user = JSON.parse(getUser());
+    const user = JSON.parse(getUser());
     this.state = {
       tree: null, didTreeChange: false, defaultTreeDepth: 3, getChartfromRoot: 1, collapsed: false, downloadingChart: false, config: {},
       highlightPostNumbers: [1], searchparam: 'First', addEmp: false, dropEmp: false, editEmp: false, firstName: '', lastName: '',
-      companyId: user.companyId, password: '',
-      positionTitle: '', companyName: '',
+      companyId: user.companyId, password: '', positionTitle: '', companyName: '',
       isManager: false, employeeId: user.employeeId, email: '', startDate: '', firstNameTemp: '', lastNameTemp: '', companyIdTemp: user.companyId,
       passwordTemp: '', positionTitleTemp: '', companyNameTemp: '', isManagerTemp: false, managerIdTemp: 0,
       employeeIdTemp: user.employeeId, emailTemp: '', startDateTemp: '', transEmp: false, searcherror: "",
       managerId: 0, autoFirst: [], autoLast: [], autoOption: [], autoEmpty: [], managerList: [], employeeList: [],
-      user: getUser(),
+      user: JSON.parse(getUser()),
       notifs: []
     };
   } //end of constructor
@@ -322,7 +321,13 @@ export class Dashboard extends React.Component {
   }
 
 
-
+  resetState(){
+    this.setState({
+      firstName: '', lastName: '',
+      companyId: this.state.user.companyId, password: '', positionTitle: '', companyName: '',
+      isManager: false, employeeId: this.state.user.employeeId, email: '', startDate: ''
+    })
+  }
 
 
 
@@ -346,7 +351,7 @@ export class Dashboard extends React.Component {
         "email": this.state.email,
         "startDate": this.state.startDate,
       })
-    }).then(res => console.log(res));
+    }).then(res => {console.log(res); this.resetState()});
 
   }
 
@@ -428,9 +433,9 @@ export class Dashboard extends React.Component {
                     <Form.Item
                       name={['user', 'password']}
                       label="Password"
-                      rules={[{ required: false }]}
+                      rules={[{ required: true }]}
                     >
-                      <Input name="passwordTemp" onChange={this.handleAdd} />
+                      <Input.Password onChange={this.handleAdd} />
                     </Form.Item>
 
                     <Form.Item
@@ -473,9 +478,6 @@ export class Dashboard extends React.Component {
                     </Form.Item>
                     <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
                       <Button type="primary" htmlType="submit" onClick={() => this.addSubmit()}>
-                        Submit
-                  </Button>
-                  <Button onClick={() => this.checkTestBody()}>
                         Submit
                   </Button>
 
@@ -741,9 +743,11 @@ export class Dashboard extends React.Component {
                 </AutoComplete>
 
                 <Badge count={5} className="badge" size="small" />
+
                 <BellOutlined className="noti" type="primary" onClick={() => this.openNotification()}>
                   Notification
-                      </BellOutlined>
+                </BellOutlined>
+                
                 <h1>
                   {this.state.firstName} {this.state.lastName}
                 </h1>
