@@ -21,7 +21,7 @@ def db():
     # db["Employees"].insert_many(testdata)
     db["Requests"].delete_many({})
     db["Requests"].drop_indexes()
-    db["Requests"].insert_many(testdata)
+    # db["Requests"].insert_many(testdata)
     yield db
     db["Employees"].drop()
     db["Requests"].drop()
