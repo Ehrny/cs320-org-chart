@@ -237,6 +237,5 @@ def test_approved_move(db: pymongo.MongoClient):
     employees.add_employee_to_db(db, employee2)
     manager_requests.create_request(db, request1_add)
     manager_requests.approve_request(db, request1_add, "3")
-    assert(db["Employees"].find({"firstName": "Abdul"})[managerId] == 1)
-    assert (db["Employees"].find({"firstName": "Salvatore"})[managerId] == 1)
-
+    assert(db["Employees"].find_one({"firstName": "Abdul"})["managerId"] == 1)
+    assert (db["Employees"].find_one({"firstName": "Salvatore"})["managerId"] == 3)

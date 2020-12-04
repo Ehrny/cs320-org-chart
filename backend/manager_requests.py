@@ -61,9 +61,16 @@ def approve_request(db: pymongo.MongoClient, request_dict: dict, approval_id: st
 
     if (allApproved):
         #moving the employee and fixing the employees under
-        doc = db["Employees"].update_one({"employee_id": request_dict["moved_employee"],
-                                          "company_id" : request_dict["company_id"], "manager_id": request_dict["from_manager"]},
-                                         {'$Set': {"manager_id" : request_dict["to_manager"]}})
+        doc2 = db["Employees"].find_one({"employeeId": request_dict["moved_employee"],
+                                          "companyId" : request_dict["company_id"],
+                                        "managerId": request_dict["from_manager"]})
+
+        print(doc2)
+        doc2["managerId"] = request_dict["to_manager"]
+
+        db["Employees"].update({"employeeId": request_dict["moved_employee"],
+                                "companyId" : request_dict["company_id"],
+                                "managerId": request_dict["from_manager"]}, doc2)
 
         employees_under = db["Employees"].find(
             {"managerId": request_dict["moved_employee"], "companyId": request_dict["company_id"]}
@@ -72,7 +79,7 @@ def approve_request(db: pymongo.MongoClient, request_dict: dict, approval_id: st
         for employee in employees_under:
             db["Employees"].update(employee, {'$set': {"managerId": request_dict["from_manager"]}})
 
-        db["Requests"].delete_many({ "company_id" : request_dict[company_id], "moved_employee": request_dict["employee_id"]})
+        db["Requests"].delete_many({"company_id": request_dict["company_id"], "moved_employee": request_dict["moved_employee"]})
 
         if (doc):
             return 1

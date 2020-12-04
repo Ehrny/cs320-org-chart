@@ -23,7 +23,7 @@ def db():
 
     db["Employees"].drop()
 
-def test_employee_by_id_trivial(database_init):
+def test_employee_by_id_trivial(db):
     res = employees.employee_by_id(db, 1, 1, 0)
     assert json.dumps(res) == json.dumps({
         "firstName" : "Miquel",
