@@ -1,0 +1,56 @@
+.loginpage {
+    background: radial-gradient(#076b25, #000000);;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: rgb(255, 255, 255);
+  }
+
+  .img {
+  
+    display: flex;
+    float: left;
+    margin-top:6px;
+    margin-left: 20px;
+    height:50px;
+    
+  }
+  .imageContainer {
+    position:relative;
+    left:10px;
+  }
+  .username{
+    width:100%
+  }
+
+  .password{
+    width: 100%;
+  }
+
+  .login-paper{
+    justify-content: center;
+    height: 50vh;
+    width: 43vh;
+    padding: 50px;
+  }
+  .forgot{
+    font-size: 15px;
+    float: right;
+    margin-top: 15px;
+  }
+  .submitbutton{
+    position: relative;
+    margin-top: 50px;
+  }
+
+  #checkedG{
+    position: relative;
+    float: left;
+    height: 10%;
+    margin-right: 10px;
+    margin-top: 3%;
+    background-color: #ffffff;
+  }

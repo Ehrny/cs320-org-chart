@@ -6,11 +6,8 @@ import search
 import links
 import config; config.load_config(".testenv")
 
-client = pymongo.MongoClient(config.MONGO_URL)
-db = client[config.MONGO_DB]
-
 @pytest.fixture
-def database_init():
+def db():
     with open('testdata.json') as f:
         testdata = json.load(f)
     
@@ -33,7 +30,7 @@ def database_init():
 
     db["Employees"].drop()
 
-def test_search_all_trivial(database_init):
+def test_search_all_trivial(db):
     miquel = json.dumps({
         "results": [
             {
@@ -61,7 +58,7 @@ def test_search_all_trivial(database_init):
     lowercase_res = search.search_all(db, 1, "miquel")
     assert json.dumps(res) == miquel, "Search all should be case insensitive"
 
-def test_search_field_trivial(database_init):
+def test_search_field_trivial(db):
     miquel = {
         "firstName" : "Miquel",
         "lastName" : "Pineda",

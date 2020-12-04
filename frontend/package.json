@@ -1,23 +1,49 @@
 {
-  "name": "frontend",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "cs320react-org-chart",
+  "version": "0.3.4",
+  "description": "Simple, high-performance react component for d3 org chart",
+  "main": "dist/index.js",
+  "directories": {
+    "example": "src/examples"
+  },
+  "files": [
+    "dist/index.js"
+  ],
+  "homepage": "./login",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js",
-    "startapi": "cd ../api && flask run --no-debugger",
-    "start:dev": "nodemon server.js"
+    "start": "webpack --watch --mode production",
+    "build": "webpack --mode production",
+    "clean": "rimraf dist",
+    "deploy": "cd examples && npm run deploy"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "body-parser": "^1.19.0",
-    "express": "^4.17.1",
-    "mysql2": "^2.2.5"
-  },
+  "author": "UNICEF, based on work of Fouad Matin <m@fouad.org>",
+  "license": "MIT",
   "devDependencies": {
-    "nodemon": "^2.0.4"
+    "babel-core": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "faker": "^4.1.0",
+    "glob": "^7.1.2",
+    "lodash": "^4.17.5",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "rimraf": "^2.6.2"
+  },
+  "peerDependencies": {
+    "d3": ">= 3.x < 4",
+    "react": ">= 15.x",
+    "react-dom": ">= 15.x"
+  },
+  "babel": {
+    "presets": [
+      "env",
+      "stage-2"
+    ]
+  },
+  "dependencies": {
+    "d3-save-svg": "0.0.2",
+    "jspdf": "^1.5.3",
+    "webpack": "^5.9.0"
   }
 }

@@ -1,12 +1,10 @@
 import React,{useState, useEffect} from 'react';
 import './App.css';
 import { Switch, Route, BrowserRouter } from 'react-router-dom';
-
 import {Login} from "./components/login"
 import {Dashboard} from "./dashboard"
 import {Dashboardemployee} from "./dashboardemployee"
-import {Dashboardmanager} from "./dashboardmanager"
-
+import {PrivateRoute, PublicRoute} from "./components/Routes"
 class App extends React.Component{
   constructor(props)
   {
@@ -21,11 +19,11 @@ class App extends React.Component{
       <div className="login">
           <div className = "app-routes">
             <BrowserRouter>
-            <Switch>   
-                <Route path = "/login" component={Login} />
-                <Route path = "/Dashboard" component={Dashboard} />
-                <Route path = "/Dashboardemployee" component={Dashboardemployee} />
-                <Route path = "/Dashboardmanager" component={Dashboardmanager} />
+            <Switch>
+                <Route exact path = "/" component={Login} />
+                <PublicRoute path="/login" component={Login} />
+                <PrivateRoute path = "/Dashboard" component={Dashboard} />
+                <PrivateRoute path = "/Dashboardemployee" component={Dashboardemployee} />
             </Switch>
             </BrowserRouter>
             </div>
