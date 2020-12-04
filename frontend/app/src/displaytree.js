@@ -42,6 +42,7 @@ export class DisplayTree extends React.Component{
     
     handleLoadConfig = () => {
         const { config } = this.state
+
         return config
     }
     render(){
@@ -56,6 +57,7 @@ export class DisplayTree extends React.Component{
             downloadImageId={downloadImageId}
             downloadPdfId={downloadPdfId}
             onConfigChange={config => {
+
                 this.handleOnChangeConfig(config)
             }}
             loadConfig={d => {

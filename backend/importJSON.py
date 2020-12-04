@@ -1,5 +1,11 @@
 import json
 import pymongo
+import dns
+import config; config.load_config(".env")
+
+# This could be changed to be by request if needed.
+client = pymongo.MongoClient(config.MONGO_URL)
+db = client[config.MONGO_DB]
 
 with open('Cyclone_Aviation-employees.json') as f:
   data1 = json.load(f)
@@ -10,9 +16,7 @@ with open('Nightwell_Enterprise-employees.json') as f:
 with open('Tiger_Microsystems-employees.json') as f:
   data3 = json.load(f)
 
-client = pymongo.MongoClient("mongodb://localhost:27017/")
-mydb = client["OrgChart"]
-mycol = mydb["Employees"]   
+mycol = db["Employees"]   
 
 mycol.delete_many({}) # Clear the database
 mycol.drop_indexes() # Reset the indexes on the table.

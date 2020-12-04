@@ -7,6 +7,7 @@ import employees
 import links
 import config; config.load_config(".testenv")
 
+
 @pytest.fixture
 def db():
     with open('testdata.json') as f:
@@ -22,6 +23,7 @@ def db():
     yield db
 
     db["Employees"].drop()
+
 
 def test_employee_by_id_trivial(db: pymongo.MongoClient):
     res = employees.employee_by_id(db, 1, 1, 0)
@@ -104,9 +106,24 @@ def test_add_edit_drop(db: pymongo.MongoClient):
     assert (employees.add_employee_to_db(db, employee1) == "success")
     assert (employees.add_employee_to_db(db, employee2) == "success")
 
+    # Check that employee has been added.
+    assert (
+        employees.employee_by_id(db, 2, 1, 0)["firstName"] == "Erika"
+    )
+    assert (
+        employees.employee_by_id(db, 2, 2, 0)["firstName"] == "Salvatore"
+    )
+    assert (
+        employees.employee_by_id(db, 2, 3, 0)["firstName"] == "Abdul"
+    )
+
     #Edit
     assert (employees.edit_employee(db, employee2.get("companyId"), employee2.get("employeeId"), employee2_modified) == "success")
     
+    assert (
+        employees.employee_by_id(db, 2, 3, 0)["firstName"] == "Abdul2"
+    )
+
     #Delete
     assert (employees.drop_employee_from_db(db, employee1) == "success")
 
